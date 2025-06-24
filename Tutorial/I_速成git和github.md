@@ -1,7 +1,7 @@
 ## 速成`github`
 
 - 先点击个人头像中的`Your reposity`, 进入仓库主页
-- ![1750723046862](image/I_速成git和github/1750723046862.png)
+- ![1750723046862](image/I_速成git和github/repo_example.png)
 
   其中, `code`为代码页面, 在下面可以看到分支`develop`以及绿色的`<>Code`按钮
 
@@ -19,7 +19,7 @@
   
   创建`PR`最重要的是确认**合并的分支(箭头指向的分支)**和新增的分支
 
-  ![1750725437823](image/I_速成git和github/1750725437823.png)
+  ![1750725437823](image/I_速成git和github/pr_example.png)
   
   这是一个创建好并通过的`PR`, `Conversation`是讨论(其它审核可以在此发表评论), `Commits`是提交概括(包括发起者编写的`message`), `Files changed`是具体的修改内容, 右侧可以添加`Labels`
 - 仓库管理者、含写权限的协作者对没被保护的分支能够自行通过`PR`
