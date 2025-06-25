@@ -1,4 +1,4 @@
-package com.manasys.manasys.cli;
+package com.manasys.manasys.controller;
 
 /**
  * @author 刘洛松

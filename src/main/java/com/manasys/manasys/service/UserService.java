@@ -1,4 +1,4 @@
-package com.manasys.manasys.utils;
+package com.manasys.manasys.service;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
