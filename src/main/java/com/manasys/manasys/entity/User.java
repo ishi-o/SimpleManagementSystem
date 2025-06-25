@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 
 /**
  * 用户实体类
@@ -18,22 +17,24 @@ import jakarta.validation.constraints.NotBlank;
  */
 @Entity
 @Table(name = "users", schema = "jhomework")    // 表名为users, 所属模式为jhomework
-@Check(constraints
-        = "password ~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).+$' AND "
-        + "length(password) BETWEEN 8 AND 20",
-        name = "ck_password_users")
-
 public class User {
 
     @Id // 注解为主键
     @GeneratedValue // 主键生成策略为默认的GenerationType.AUTO, 也可以显式地注解@GeneratedValue(strategy = ...)
     private Long uid;
 
-    @Column(name = "username", nullable = false)    // 非空约束
-    @NotBlank(message = "用户名不能为空")   // 不能为空字符串
+    @Column(name = "username", nullable = false, unique = true)    // 非空约束
+    @Check(constraints // username属性满足约束: 必须包含且只包含大写字母, 小写字母, 数字, 长度为1~20
+            = "username ~ '^(?=.*[a-zA-Z0-9]).+$' AND "
+            + "length(username) <= 20",
+            name = "ck_username_users")
     private String uname;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false)    // 非空约束
+    @Check(constraints // password属性满足约束: 必须包含且只包含大写字母, 小写字母, 数字, 特殊字符@#$%&+=, 长度为8~20
+            = "password ~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%&+=]).+$' AND "
+            + "length(password) BETWEEN 8 AND 20",
+            name = "ck_password_users")
     private String pwd;
 
     @PersistenceCreator
@@ -87,6 +88,16 @@ public class User {
      */
     public void setPassword(String password) {
         pwd = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass() == User.class) {
+            User u = (User) o;
+            return uid.equals(u.uid);
+        } else {
+            return false;
+        }
     }
 
 }

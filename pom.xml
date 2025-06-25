@@ -63,10 +63,10 @@
 
 		<!-- Jakarta Validation API -->
 		<!-- 提供有效性检查 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
-		</dependency>
+		</dependency> -->
 
 		<!-- Spring Data JPA -->
 		<!-- JPA在Spring框架下的扩展 -->

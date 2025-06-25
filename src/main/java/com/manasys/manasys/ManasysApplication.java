@@ -12,8 +12,6 @@ public class ManasysApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(ManasysApplication.class, args);
         UserService userService = context.getBean(UserService.class);
-        userService.signUp("test_user_with_wrong_pwd", "iiiiiiii");
-        userService.signUp("test_user_with_wrong_pwd", "iii");
     }
 
 }
