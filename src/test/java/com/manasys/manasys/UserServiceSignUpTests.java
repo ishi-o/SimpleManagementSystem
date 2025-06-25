@@ -17,7 +17,7 @@ import com.manasys.manasys.exception.signup.InvalidPasswordException;
 import com.manasys.manasys.exception.signup.InvalidUsernameException;
 import com.manasys.manasys.exception.signup.UserAlreadyExistsException;
 import com.manasys.manasys.repository.UserRepository;
-import com.manasys.manasys.utils.UserService;
+import com.manasys.manasys.service.UserService;
 
 @SpringBootTest
 class UserServiceSignUpTests {
