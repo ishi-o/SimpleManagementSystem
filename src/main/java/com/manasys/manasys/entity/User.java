@@ -1,5 +1,6 @@
 package com.manasys.manasys.entity;
 
+import org.hibernate.annotations.Check;
 import org.springframework.data.annotation.PersistenceCreator;
 
 import jakarta.persistence.Column;
@@ -8,18 +9,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 /**
  * 用户实体类
  *
  * @author 刘洛松
- * @since 1.0
- * @updateDate 2025.6.25
+ * @since 2025.6.25
  */
 @Entity
 @Table(name = "users", schema = "jhomework")    // 表名为users, 所属模式为jhomework
+@Check(constraints
+        = "password ~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).+$' AND "
+        + "length(password) BETWEEN 8 AND 20",
+        name = "ck_password_users")
+
 public class User {
 
     @Id // 注解为主键
@@ -31,10 +34,6 @@ public class User {
     private String uname;
 
     @Column(name = "password", nullable = false)
-    @NotBlank(message = "用户密码必须不为空")
-    @Size(min = 8, max = 20, message = "密码长度必须在8~20之间")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).+$",
-            message = "用户密码必须包含大写字母, 小写字母, 数字以及一个特殊字符")
     private String pwd;
 
     @PersistenceCreator

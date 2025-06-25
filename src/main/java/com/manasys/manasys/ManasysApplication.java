@@ -2,15 +2,18 @@ package com.manasys.manasys;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import com.manasys.manasys.utils.UserService;
 
 @SpringBootApplication
 public class ManasysApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ManasysApplication.class, args);
-        System.out.println();
-        System.out.println("Hello World!");
-        System.out.println();
+        ConfigurableApplicationContext context = SpringApplication.run(ManasysApplication.class, args);
+        UserService userService = context.getBean(UserService.class);
+        userService.signUp("test_user_with_wrong_pwd", "iiiiiiii");
+        userService.signUp("test_user_with_wrong_pwd", "iii");
     }
 
 }
