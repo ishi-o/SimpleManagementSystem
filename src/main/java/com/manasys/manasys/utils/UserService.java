@@ -4,6 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.manasys.manasys.entity.User;
+import com.manasys.manasys.exception.signup.InvalidPasswordException;
+import com.manasys.manasys.exception.signup.InvalidUsernameException;
+import com.manasys.manasys.exception.signup.UserAlreadyExistsException;
 import com.manasys.manasys.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -29,20 +32,26 @@ public class UserService {
     }
 
     /**
-     * 事务: 注册用户, 若用户不存在, 用户名合法, 用户密码合法, 则成功创建并返回新建的User对象; 否则,
-     * 抛出DataIntegrityViolationException异常
+     * 事务: 注册用户, 若用户不存在, 用户名合法, 用户密码合法, 则成功创建并返回新建的User对象; 否则抛出异常
      *
      * @param username 用户名
      * @param password 用户密码
      * @return 新建用户
-     * @throws DataIntegrityViolationException 用户存在, 或用户名不合法, 或用户密码不合法
+     * @throws UserAlreadyExistsException 用户存在时抛出
+     * @throws InvalidUsernameException 用户名不合法时抛出
+     * @throws InvalidPasswordException 密码不合法时抛出
+     * @throws DataIntegrityViolationException 向数据库插入数据出错时抛出
      */
     @Transactional
-    public User signUp(String username, String password) throws DataIntegrityViolationException {
-        try {
+    public User signUp(String username, String password) {
+        if (userRepo.findByUsername(username).isPresent()) {
+            throw new UserAlreadyExistsException(username);
+        } else if (!username.matches("^[a-zA-Z0-9]{1,20}$")) {
+            throw new InvalidUsernameException(username);
+        } else if (!password.matches("^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=[^0-9]*[0-9])(?=[^@#$%&+=]*[@#$%&+=])[a-zA-Z0-9@#$%&+=]{8,20}$")) {
+            throw new InvalidPasswordException(password);
+        } else {
             return userRepo.save(User.newUserWithFullInfo(username, password));
-        } catch (DataIntegrityViolationException e) {
-            throw e;
         }
     }
 
