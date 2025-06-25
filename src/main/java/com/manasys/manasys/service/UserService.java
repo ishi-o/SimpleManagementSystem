@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.manasys.manasys.entity.User;
+import com.manasys.manasys.exception.signin.PasswordMismatchException;
 import com.manasys.manasys.exception.signin.UserNotFoundException;
 import com.manasys.manasys.exception.signup.InvalidPasswordException;
 import com.manasys.manasys.exception.signup.InvalidUsernameException;
@@ -63,6 +64,8 @@ public class UserService {
         Optional<User> user = userRepo.findByUsername(username);
         if (!user.isPresent()) {
             throw new UserNotFoundException(username);
+        } else if (!user.get().getPassword().equals(password)) {
+            throw new PasswordMismatchException(password);
         } else {
             return user.get();
         }

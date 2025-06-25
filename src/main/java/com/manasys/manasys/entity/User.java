@@ -64,4 +64,13 @@ public class User {
         }
     }
 
+    /**
+     * 获取用户密码
+     *
+     * @return 用户密码
+     */
+    public String getPassword() {
+        return password;
+    }
+
 }
