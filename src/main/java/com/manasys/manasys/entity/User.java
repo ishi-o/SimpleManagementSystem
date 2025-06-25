@@ -38,9 +38,20 @@ public class User {
     private String pwd;
 
     @PersistenceCreator
-    public User(String uname, String pwd) {
+    private User(String uname, String pwd) {
         this.uname = uname;
         this.pwd = pwd;
+    }
+
+    /**
+     * 创建一个指定了所有信息(即包括用户名和用户密码)的User实例
+     *
+     * @param uname 用户名
+     * @param pwd 用户密码
+     * @return 如果用户名和用户密码合法, 将返回新的实例
+     */
+    public static User newUserWithFullInfo(String uname, String pwd) {
+        return new User(uname, pwd);
     }
 
     /**
