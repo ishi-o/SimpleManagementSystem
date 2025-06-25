@@ -1,9 +1,12 @@
 package com.manasys.manasys.service;
 
+import java.util.Optional;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.manasys.manasys.entity.User;
+import com.manasys.manasys.exception.signin.UserNotFoundException;
 import com.manasys.manasys.exception.signup.InvalidPasswordException;
 import com.manasys.manasys.exception.signup.InvalidUsernameException;
 import com.manasys.manasys.exception.signup.UserAlreadyExistsException;
@@ -52,6 +55,16 @@ public class UserService {
             throw new InvalidPasswordException(password);
         } else {
             return userRepo.save(User.newUserWithFullInfo(username, password));
+        }
+    }
+
+    @Transactional
+    public User signIn(String username, String password) {
+        Optional<User> user = userRepo.findByUsername(username);
+        if (!user.isPresent()) {
+            throw new UserNotFoundException(username);
+        } else {
+            return user.get();
         }
     }
 
