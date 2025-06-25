@@ -40,8 +40,7 @@
    *
    * @author 一作
    * @author 二作
-   * @since 自从x.xx版本引入
-   * @updateDate YYYY-MM-DD
+   * @since 日期
    * @see 父类
    * @see 接口
    */
@@ -54,7 +53,6 @@
       "/**",
       " * @author ${user}",
       " * @since",
-      " * @updateDate",
       " */"
   ],
 
