@@ -224,6 +224,7 @@
 - `java`不支持多继承
 - `java`不支持常方法，`cpp`支持用`const`修复一个方法保证不能被非常量调用
 - `java`和`cpp`均支持类型自动推断，在`cpp`中是`auto`而在`java`中是`var`
+- `java`的`Type[]`整体表示一个数组类型
 
 ## 结构型语句
 
@@ -477,3 +478,49 @@
 - `extends TypeOrInterface`：虽然只提供了`extends`，但这个限定符后面可以跟类，也**可以跟接口**，表示这个类型参数必须继承或实现自`TypeOrInterface`类或接口
 - `super TypeOrInterface`：表明这个类型参数必须是`TypeOrInterface`的父类或父接口
 - 两者可以一起使用
+
+## 异常处理
+
+### 异常的分类
+
+- 所有异常分为受检异常、非受检异常、错误
+- 声明某方法可能会抛出某异常：`throws`关键字
+
+  在某方法内抛出某异常`new`后跟一个异常类对象
+
+  ```java
+  void method() throws Exception {
+    throw new Exception();
+  }
+  ```
+
+- 受检异常：编译器会在编译期检查的异常，如果用户的某个方法**调用了会抛出受检异常的方法**，但既没有**处理**也没有**显式地抛出**，就会有红色波浪线提醒
+
+  所有受检异常都是`Exception`的子类且不是`RuntimeException`的子类
+
+- 非受检异常：运行时可能抛出的异常，不需要显式地用`throws`声明
+
+  所有非受检异常都是`RuntimeException`的子类
+
+- 错误：这种异常是脱离程序的，可能是硬件出了问题，例如内存溢出
+
+### 异常的实质
+
+- ```mermaid
+  graph
+  Throwable --> Error
+  Throwable --> Exception
+  Exception --> RuntimeException
+  Exception --- Checked(("检查性异常\nChecked Exception")) --> IOException
+  RuntimeException --> A(...)
+  Checked --> ParseException
+  Checked --> ...
+  ```
+
+- 所有异常和错误类都实现了`Throwable`接口
+
+- 自定义异常：很简单，只需要根据需求继承`Exception`或`RuntimeException`(通常是后者)并实现构造方法即可
+
+  通常由业务层抛出，用户接口层捕获并处理
+
+- `catch-try-finally`：`finally`可选，表示`try`后(即时出现异常)必须执行的代码块，例如关闭文件等
