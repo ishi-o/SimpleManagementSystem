@@ -3,6 +3,7 @@ CREATE TABLE jhomework.users (
     uid BIGINT,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    login_status BOOLEAN NOT NULL,
     CONSTRAINT pk_users PRIMARY KEY (uid),
     CONSTRAINT uniq_username_users UNIQUE (username),
     CONSTRAINT ck_username_users CHECK (
