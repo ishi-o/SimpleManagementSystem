@@ -180,21 +180,6 @@
 - 类名和接口名规范：构成标识符的所有单词首字母均大写
 - 常量名规范：应全大写
 
-### `java`和`cpp`部分语法特性异同
-
-- `java`不支持运算符重载，仅有部分特殊的类含有类似的语法糖(`String`支持`+`拼接，但没有`[]`运算符)
-- `java`不支持默认参数
-- `java`和`cpp`均支持函数重载，重载均要求方法名相同但参数列表不同
-- `java`和`cpp`均支持变长参数，`java`变长参数的语法如下：
-
-  ```java
-  // paramList可以是零或多个String参数
-  void method(String... paramList) {}
-  ```
-
-- `java`不支持多继承
-- `java`不支持常方法，`cpp`支持用`const`修复一个方法保证不能被非常量调用
-
 ### `protected`权限的解释
 
 - 在引入类(链接在`.class`文件中的字节码)时，`JVM`会加载类/接口的元数据进方法区，并构建**方法表**来区分不同的访问控制域
@@ -215,3 +200,36 @@
   - 包外子类可以通过**基类**访问**保护型静态方法**，因为包外子类能指向类的方法表，同时符合`protected`的范围
   
   - 包内子类可以通过基类及其对象访问保护型方法，因为包内类能指向类及其对象的方法表，同时符合`protected`的范围
+
+## `java`的奇妙语法糖
+
+- `java`不支持运算符重载，仅有部分特殊的类含有类似的语法糖(`String`支持`+`拼接，但没有`[]`运算符)
+- `java`不支持默认参数
+- `java`和`cpp`均支持函数重载，重载均要求方法名相同但参数列表不同
+- `java`和`cpp`均支持变长参数，`java`变长参数的语法如下：
+
+  ```java
+  // paramList可以是零或多个String参数
+  void method(String... paramList) {}
+  ```
+
+- `java`不支持多继承
+- `java`不支持常方法，`cpp`支持用`const`修复一个方法保证不能被非常量调用
+- `java`和`cpp`均支持类型自动推断，在`cpp`中是`auto`而在`java`中是`var`
+
+## 结构型语句
+
+- `if-else if-else`
+- `where-continue-break`
+- `for(;;)-continue-break`
+- `for(type e : c)`语法糖
+- `try-catch-finally`
+- `switch-case-break`
+- `switch-case -> {}`
+
+## 面向对象详解
+
+### 数据类型
+
+- `java`的数据类型分为两种：基础数据类型和对象类型
+- 基础数据类型只有八种，且全小写，分别为`byte、short、int、long、float、double、boolean、char`
