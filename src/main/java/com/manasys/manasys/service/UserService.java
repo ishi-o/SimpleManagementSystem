@@ -1,9 +1,14 @@
 package com.manasys.manasys.service;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.manasys.manasys.entity.User;
+import com.manasys.manasys.exception.signin.PasswordMismatchException;
+import com.manasys.manasys.exception.signin.UserAlreadyLoginException;
+import com.manasys.manasys.exception.signin.UserNotFoundException;
 import com.manasys.manasys.exception.signup.InvalidPasswordException;
 import com.manasys.manasys.exception.signup.InvalidUsernameException;
 import com.manasys.manasys.exception.signup.UserAlreadyExistsException;
@@ -21,6 +26,7 @@ import jakarta.transaction.Transactional;
 public class UserService {
 
     private final UserRepository userRepo;
+    private User user;
 
     /**
      * 构造方法, 由依赖注入器生成userRepo对象
@@ -29,6 +35,7 @@ public class UserService {
      */
     public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
+        this.user = null;
     }
 
     /**
@@ -52,6 +59,32 @@ public class UserService {
             throw new InvalidPasswordException(password);
         } else {
             return userRepo.save(User.newUserWithFullInfo(username, password));
+        }
+    }
+
+    /**
+     * 事务: 用户登录, 若用户存在且密码正确且未在其它设备上登录, 则登录成功; 否则抛出异常
+     *
+     * @param username 用户名
+     * @param password 用户密码
+     * @throws UserNotFoundException 当用户不存在时抛出
+     * @throws PasswordMismatchException 当密码不正确时抛出
+     * @throws UserAlreadyLoginException 当用户已登录时抛出
+     */
+    @Transactional
+    public void signIn(String username, String password) {
+        try {
+            user = userRepo.findByUsername(username).get();
+            if (!user.getPassword().equals(password)) {
+                throw new PasswordMismatchException(password);
+            } else if (user.getLoginStatus()) {
+                throw new UserAlreadyLoginException(username);
+            } else {
+                user.setLoginStatus(true);
+                userRepo.save(user);
+            }
+        } catch (NoSuchElementException e) {
+            throw new UserNotFoundException(username);
         }
     }
 

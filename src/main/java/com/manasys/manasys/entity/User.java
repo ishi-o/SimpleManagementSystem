@@ -34,13 +34,23 @@ public class User {
             name = "ck_password_users")
     private String password;
 
+    @Column(name = "login_status", nullable = false)
+    private boolean loginStatus;
+
     protected User() {
     }
 
+    /**
+     * 全参数构造器
+     *
+     * @param username 用户名
+     * @param password 用户密码
+     */
     @PersistenceCreator
     protected User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.loginStatus = false;
     }
 
     /**
@@ -62,6 +72,38 @@ public class User {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+
+    /**
+     * 获取用户密码
+     *
+     * @return 用户密码
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * 获取登录状态
+     *
+     * @return true 若用户已登录 false 若用户未登录
+     */
+    public boolean getLoginStatus() {
+        return loginStatus;
+    }
+
+    /**
+     * 设置登录状态
+     *
+     * @param loginStatus 登录状态, true表示已登录
+     */
+    public void setLoginStatus(boolean loginStatus) {
+        this.loginStatus = loginStatus;
     }
 
 }

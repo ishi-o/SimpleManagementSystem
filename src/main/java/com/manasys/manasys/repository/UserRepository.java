@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.manasys.manasys.entity.User;
 
 /**
- * 用户领域仓库的接口
+ * 用户领域仓库的接口, 继承自JpaRepository, 由编译器实现基础的CRUD方法
  *
  * @author 刘洛松
  * @since 2025.6.25
+ * @see JpaRepository
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
