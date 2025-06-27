@@ -93,6 +93,8 @@
   jar -xf a.jar 解压a.jar
   ```
 
+- 归档后，可以通过`java -cp xxx.jar MainClass`运行主类`MainClass`，所有需要链接的类都在归档文件中找到
+
 ## 关键字及声明型语句
 
 ### 访问控制修饰符
@@ -130,6 +132,18 @@
 - `abstract`不能和`final`或`private`或`static`同时出现，因为没有意义
 - `final`不能修饰接口，因为没有意义
 - 修饰符的顺序对程序没有影响，但规范是先是访问控制修饰符，然后是其它修饰符
+- `final`修饰引用对象时只能限制该变量**不能改变指向**，但没有限制用户通过该变量**改变其指向的实例**
+  
+  因为`final`修饰方法只代表该方法不能被重写，所以做不到`cpp`那样用一个类型声明可变或不可变对象
+
+  在`java`中，一个类要么是可变类，要么是不可变类，**不可变类的所有属性都是常量**，例如`String`就是典型的不可变类，不要把实例方法和引用赋值搞混：
+
+  ```java
+  String s = "";    // 引用赋值
+  s = s.trim();     // 实际上是改变了s的指向使其指向s.trim()的返回值，而没有改变原来指向堆中的实例
+  StringBuilder sb = new StringBuilder("");   // 引用赋值
+  sb.append("a");   // StringBuilder是一个可变类, append()修改了sb指向的实例的属性
+  ```
 
 ### `synchronized、transient、volatile、sealed、permits`
 

@@ -69,3 +69,15 @@
     - 同样有`parseDouble()、toString()、valueOf()`系列方法
 
     - 还有`isFinite()、isInfinite()、isNaN()`等判断方法
+
+## 字符串
+
+### `CharSequence`
+
+- `CharSequence`是一个接口
+
+### `String`
+
+- `String`是一个不可变类，其所有属性
+
+### `StringBuilder`
