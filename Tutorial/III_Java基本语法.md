@@ -290,6 +290,8 @@
 
   - `public int hashCode()`：获取哈希值
 
+  - `public String toString()`：将对象转化为字符串，若实现该方法，则可以通过字符串的`+`语法糖自动转换
+
   - `protected Object clone() throws CloneNotSupportedException`：创建并返回本对象的副本(浅拷贝副本)，会抛出**受检异常**`CloneNotSupportedException`，防止你没有重写但又在某个地方调用了该方法
 
     重写它一般需要声明`implements Cloneable`(一个空接口)并`public`地重写
