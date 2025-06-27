@@ -180,3 +180,113 @@
 
   - `void setCharAt(int, char)`：将前者指向的字符改为后者
 
+## 集合框架
+
+### `Iterable<E>`接口
+
+- `Iterable<E>`是所有元素集合都实现了的接口
+- `Iterator<E> iterator()`：获取一个迭代器
+- `void forEach(Consumer<? super E>)`：为集合的每一个元素都执行一遍你提供的`lambda`表达式
+- 所有实现了`Iterable`接口的类均可使用语法糖`for (type e : c)`，其中`e`是临时变量，是集合对象`c`中的元素
+- `Iterator<E>`接口包含以下方法：
+  - `boolean hasNext()`：判断是否有下一个元素
+  - `E next()`：返回下一个元素，若没有则抛出`NoSuchElementException`异常
+  - `void remove()`：用于安全地删除当前元素
+
+    在使用迭代器遍历时，一旦通过对象进行增删行为，调用迭代器的方法将抛出异常
+
+    因此应该使用迭代器的`remove()`删除元素
+
+    当当前迭代器从未使用过`next()`或已经使用过`remove()`时，调用`remove()`将抛出`IllegalStateException`异常
+- 通过非语法糖的方式遍历集合的方法如下(如果需要在遍历过程中删除元素)：
+  
+  ```java
+  List<Integer> list;
+  var it = list.iterator();
+  while (it.hasNext()) {
+    var e = it.next();
+    if (e == 1) {
+      it.remove();
+    }
+  }
+  ```
+
+- 为什么`Iterator`是一个接口，在文档中也找不到实现它的类，为什么能获取到一个实例化的对象？
+
+  因为实现这个接口的是在各个容器内部定义的私有内部类
+
+### `Collection<E>`接口
+
+- `Collection<E>`接口继承自`Iterable`接口，所有元素集合都实现了该接口
+- 定义的方法如下，实现它的类可以有不同的实现，但语义满足：
+  - `boolean add(E)`：调用后，集合中应能够找到该元素
+
+  - `void clear()`：调用后，集合应没有元素
+
+  - `boolean contains(Object)`：若集合存在该对象应返回`true`
+
+  - `boolean isEmpty()`：若集合为空应返回`true`
+
+  - `boolean remove(Object)`：若该对象存在于集合中，调用该方法后应保证删除它
+
+  - `int size()`：应返回集合的长度
+
+  - `Object[] toArray()`：应返回由集合中元素构成的静态数组
+
+### `List<E>`接口
+
+- `List`接口继承自`Collection`接口，所有有序集合(列表)都实现了该接口
+- 该接口额外包含以下常用方法：
+  - `void add(int idx, E)`：向第`idx`位置插入元素，`0-idx`
+  
+  - `void set(int idx, E)`：设置第`idx`位置的元素
+
+  - `E get(int)`：获取指定位置的元素
+
+  - `E getFirst()`和`E getLast()`
+
+  - `void remove(int)、E removeFirst()、E removeLast()`
+
+  - `List<E> subList(int, int)`：获取子列表，以视图形式存在(没有在堆中新分配内存)
+- 实现`List`接口的常用类有`ArrayList、LinkedList、Vector、Stack`，分别是数组实现、链表实现、线程安全列表、线程安全栈，其中`LinkedList`类还实现了`Deque`接口
+
+### `Set<E>`接口
+
+- `Set`接口同样继承自`Collection`接口，所有唯一性集合都实现了该接口
+- `Set`本身没有提供更多的方法，实现它的常用类有`HashSet、TreeSet、LinkedHashSet`，分别是哈希表实现(乱序)、红黑树实现(键有序)、哈希表实现(插入顺序排序)
+
+### `Queue<E>`和`Deque<E>`接口
+
+- `Queue`接口同样继承自`Collection`接口，所有只操作端元素的集合都实现了该接口
+- `Queue`接口提供了额外的方法，它们的功能和`Collection`接口定义的方法有对应关系，但`Queue`新增的方法在操作失败时会返回特殊值，而`Collection`的方法会抛出异常
+  - `offer()`和`add()`
+
+  - `peek()`和`element()`
+
+  - `poll()`和`remove()`
+- `Deque`接口猜都能猜到，在方法名后加`First`和`Last`
+- 实现了`Queue`的常用类有`PriorityQueue`(优先队列)和`ArrayDeque`(数组实现的双端队列)
+
+### `Map<K, V>`接口
+
+- `Map`接口并不继承`Iterable`和`Collection`，所有映射集合都实现了该接口
+- `Map`提供的常用方法有：
+  - `clear()`
+
+  - `containsKey()`和`containsValue()`
+
+  - `V get(K)`
+
+  - `put(K, V)`
+
+  - `remove(Object)`
+- 含有公有内部类`Entry<K, V>`
+- 实现了`Map`接口的常用类有`HashMap、TreeMap、HashTable、WeakHashMap、LinkedMap`，分别是哈希表实现、红黑树实现、线程安全的哈希表实现、基于弱引用的哈希表实现、哈希表实现(插入顺序排序)
+
+## 内置算法
+
+### `Math`
+
+### `Arrays`
+
+### `Collections`
