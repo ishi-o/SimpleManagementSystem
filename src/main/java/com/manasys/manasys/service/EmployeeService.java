@@ -22,7 +22,7 @@ import jakarta.transaction.Transactional;
  * @see CommonService
  */
 @Service
-public class EmployeeService extends CommonService {
+public class EmployeeService {
 
     private final EmployeeRepository empRepo;
     private final EmpRecordRepository empRecordRepo;
@@ -32,13 +32,11 @@ public class EmployeeService extends CommonService {
         this.empRecordRepo = empRecordRepo;
     }
 
-    @Override
     @Transactional
     public void register(String ename) {
         empRepo.save(Employee.newInstance(ename, LocalDate.now()));
     }
 
-    @Override
     @Transactional
     public String viewAllEmployees() {
         List<Employee> emps = empRepo.findAll(Sort.by("eid"));
@@ -49,7 +47,6 @@ public class EmployeeService extends CommonService {
         return ans;
     }
 
-    @Override
     @Transactional
     public void punchIn(Long eid) {
         Employee emp = empRepo.findById(eid).orElseThrow();
@@ -58,7 +55,6 @@ public class EmployeeService extends CommonService {
         }
     }
 
-    @Override
     @Transactional
     public String getPunches(Long eid, Integer year, Integer month) {
         if (empRepo.existsById(eid)) {
@@ -68,7 +64,6 @@ public class EmployeeService extends CommonService {
         }
     }
 
-    @Override
     @Transactional
     public String getPunches(Long eid) {
         if (empRepo.existsById(eid)) {

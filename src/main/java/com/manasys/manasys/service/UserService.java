@@ -22,7 +22,7 @@ import jakarta.transaction.Transactional;
  * @see CommonService
  */
 @Service
-public class UserService extends CommonService {
+public class UserService {
 
     private final UserRepository userRepo;
     private User user;
@@ -48,7 +48,6 @@ public class UserService extends CommonService {
      * @throws InvalidPasswordException 密码不合法时抛出
      * @throws DataIntegrityViolationException 向数据库插入数据出错时抛出
      */
-    @Override
     @Transactional
     public User signUp(String username, String password) {
         if (userRepo.findByUsername(username).isPresent()) {
@@ -71,7 +70,6 @@ public class UserService extends CommonService {
      * @throws PasswordMismatchException 当密码不正确时抛出
      * @throws UserAlreadyLoggedInByOthersException 当用户已在其它设备上登录时抛出
      */
-    @Override
     @Transactional
     public void signIn(String username, String password) {
         user = userRepo.findByUsername(username).orElseThrow(() -> {
@@ -89,7 +87,6 @@ public class UserService extends CommonService {
         }
     }
 
-    @Override
     @Transactional
     public void signOut() {
         user.setLoginStatus(false);
@@ -97,7 +94,6 @@ public class UserService extends CommonService {
         user = null;
     }
 
-    @Override
     @Transactional
     public void logOut() {
         userRepo.deleteById(user.getUid());

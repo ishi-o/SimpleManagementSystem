@@ -31,8 +31,12 @@ public class EmployeePage {
     @ShellMethod(key = "reg-emp", value = "登记新员工")
     public String registerEmployee(String ename) {
         if (checkShellMode()) {
-            empServ.register(ename);
-            return "登记成功!";
+            try {
+                empServ.register(ename);
+                return "登记成功!";
+            } catch (Exception e) {
+                return e.getMessage();
+            }
         } else {
             return "用户状态异常: 您尚未登录管理员账号!";
         }

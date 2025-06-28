@@ -7,3 +7,5 @@ CREATE TABLE jhomework.send_packages (
     CONSTRAINT pk_sendpack PRIMARY KEY (pid),
     CONSTRAINT fk_crid_sendpack_to_clirec FOREIGN KEY (crid) REFERENCES jhomework.client_record(crid)
 );
+
+SELECT * FROM jhomework.send_packages;
