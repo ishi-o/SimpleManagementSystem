@@ -80,6 +80,24 @@ public class User {
     }
 
     /**
+     * 获取用户id
+     *
+     * @return 用户id
+     */
+    public long getUid() {
+        return uid;
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @return 用户名
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
      * 获取用户密码
      *
      * @return 用户密码
