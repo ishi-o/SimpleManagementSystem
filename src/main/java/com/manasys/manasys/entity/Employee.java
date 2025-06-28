@@ -43,6 +43,11 @@ public class Employee {
         return new Employee(ename, joinDate);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return Employee.class == o.getClass() && eid.equals(((Employee) o).eid);
+    }
+
     public long getEid() {
         return eid;
     }

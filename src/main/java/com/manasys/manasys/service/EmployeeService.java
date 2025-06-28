@@ -6,7 +6,10 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.manasys.manasys.entity.EmpRecord;
+import com.manasys.manasys.entity.EmpRecord.EmpRecordPK;
 import com.manasys.manasys.entity.Employee;
+import com.manasys.manasys.repository.EmpRecordRepository;
 import com.manasys.manasys.repository.EmployeeRepository;
 
 import jakarta.transaction.Transactional;
@@ -21,9 +24,11 @@ import jakarta.transaction.Transactional;
 public class EmployeeService {
 
     private final EmployeeRepository empRepo;
+    private final EmpRecordRepository empRecordRepo;
 
-    public EmployeeService(EmployeeRepository empRepo) {
+    public EmployeeService(EmployeeRepository empRepo, EmpRecordRepository empRecordRepo) {
         this.empRepo = empRepo;
+        this.empRecordRepo = empRecordRepo;
     }
 
     @Transactional
@@ -39,6 +44,14 @@ public class EmployeeService {
             ans += "\r\n" + e.getEid() + "\t\t" + e.getEname() + "\t\t\t" + e.getJoindate();
         }
         return ans;
+    }
+
+    @Transactional
+    public void punchIn(long eid) {
+        Employee emp = empRepo.findById(eid).orElseThrow();
+        if (!empRecordRepo.existsById(new EmpRecordPK(emp, LocalDate.now()))) {
+            empRecordRepo.save(EmpRecord.newInstance(emp, LocalDate.now()));
+        }
     }
 
 }

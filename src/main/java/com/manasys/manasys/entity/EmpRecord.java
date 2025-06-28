@@ -1,12 +1,14 @@
 package com.manasys.manasys.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,21 +23,52 @@ import jakarta.persistence.Table;
 @Table(name = "emp_record", schema = "jhomework")
 public class EmpRecord {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "eid", referencedColumnName = "eid")
-    private Employee employee;
+    @Embeddable
+    public static class EmpRecordPK implements Serializable {
 
-    @Column(name = "check_date", nullable = false)
-    private LocalDate checkDate;
+        @ManyToOne
+        @JoinColumn(name = "eid", referencedColumnName = "eid")
+        private Employee employee;
+
+        @Column(name = "check_date", nullable = false)
+        private LocalDate checkDate;
+
+        public EmpRecordPK() {
+        }
+
+        public EmpRecordPK(Employee emp, LocalDate checkDate) {
+            this.employee = emp;
+            this.checkDate = checkDate;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (EmpRecordPK.class == o.getClass()) {
+                EmpRecordPK pk = (EmpRecordPK) o;
+                return employee.equals(pk.employee) && checkDate.equals(pk.checkDate);
+            } else {
+                return false;
+            }
+        }
+
+        Employee getEmployee() {
+            return employee;
+        }
+
+        LocalDate getDate() {
+            return checkDate;
+        }
+    }
+
+    @EmbeddedId
+    private EmpRecordPK emprecord;
 
     protected EmpRecord() {
     }
 
     @PersistenceCreator
     protected EmpRecord(Employee emp, LocalDate checkDate) {
-        this.employee = emp;
-        this.checkDate = checkDate;
+        this.emprecord = new EmpRecordPK(emp, checkDate);
     }
 
     public static EmpRecord newInstance(Employee emp, LocalDate checkDate) {
@@ -43,11 +76,11 @@ public class EmpRecord {
     }
 
     public Employee getEmployee() {
-        return employee;
+        return emprecord.getEmployee();
     }
 
     public LocalDate getDate() {
-        return checkDate;
+        return emprecord.getDate();
     }
 
 }

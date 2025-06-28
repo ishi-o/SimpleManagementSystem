@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class ManasysApplication {
@@ -16,7 +17,14 @@ public class ManasysApplication {
                 System.out.println(e.getMessage());
             }
         }
-        SpringApplication.run(ManasysApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(ManasysApplication.class, args);
+        // Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        //     UserService userServ = context.getBean(UserService.class);
+        //     try {
+        //         userServ.logOut();
+        //     } catch (Exception e) {
+        //     }
+        // }));
     }
 
 }
