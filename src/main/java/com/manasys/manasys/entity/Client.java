@@ -43,7 +43,7 @@ public class Client {
         return new Client(cname, phonenum, loc);
     }
 
-    long getCid() {
+    Long getCid() {
         return cid;
     }
 

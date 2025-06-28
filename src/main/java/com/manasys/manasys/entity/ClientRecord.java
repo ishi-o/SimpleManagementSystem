@@ -46,7 +46,7 @@ public class ClientRecord {
         return new ClientRecord(client, visitDate);
     }
 
-    public long getCid() {
+    public Long getCid() {
         return crid;
     }
 

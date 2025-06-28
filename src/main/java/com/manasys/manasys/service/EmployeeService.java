@@ -47,7 +47,7 @@ public class EmployeeService {
     }
 
     @Transactional
-    public void punchIn(long eid) {
+    public void punchIn(Long eid) {
         Employee emp = empRepo.findById(eid).orElseThrow();
         if (!empRecordRepo.existsById(new EmpRecordPK(emp, LocalDate.now()))) {
             empRecordRepo.save(EmpRecord.newInstance(emp, LocalDate.now()));
@@ -55,10 +55,23 @@ public class EmployeeService {
     }
 
     @Transactional
-    public String getPunches(long eid, int year, int month) {
+    public String getPunches(Long eid, Integer year, Integer month) {
         if (empRepo.existsById(eid)) {
-            Employee emp = empRepo.findById(eid).get();
-            return "员工 \"" + emp.getEname() + "\" 于 " + year + " 年 " + month + " 月 共打卡 " + empRecordRepo.countByYearAndMonth(eid, year, month) + " 次!";
+            return "员工号为 \"" + eid + "\" 的员工于 " + year + " 年 " + month + " 月 共打卡 " + empRecordRepo.countByYearAndMonth(eid, year, month) + " 次!";
+        } else {
+            return "该员工不存在!";
+        }
+    }
+
+    @Transactional
+    public String getPunches(Long eid) {
+        if (empRepo.existsById(eid)) {
+            String ans = "员工号为 \"" + eid + "\" 的员工入职以来的打卡情况如下: \r\n年份\t\t月份\t\t打卡次数";
+            List<Object[]> list = empRecordRepo.countFromJoinDate(eid);
+            for (Object[] record : list) {
+                ans += "\r\n" + record[0] + "\t\t" + record[1] + "\t\t" + record[2];
+            }
+            return ans;
         } else {
             return "该员工不存在!";
         }

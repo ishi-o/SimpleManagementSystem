@@ -32,13 +32,13 @@ public class SendPackage extends Package {
     }
 
     @PersistenceCreator
-    protected SendPackage(LocalDate procDate, ClientRecord clientRecord, int fee) {
+    protected SendPackage(LocalDate procDate, ClientRecord clientRecord, Integer fee) {
         super(procDate);
         this.clientRecord = clientRecord;
         this.fee = fee;
     }
 
-    public SendPackage newInstance(LocalDate procDate, ClientRecord clientRecord, int fee) {
+    public SendPackage newInstance(LocalDate procDate, ClientRecord clientRecord, Integer fee) {
         return new SendPackage(procDate, clientRecord, fee);
     }
 
@@ -46,7 +46,7 @@ public class SendPackage extends Package {
         return clientRecord;
     }
 
-    public int getFee() {
+    public Integer getFee() {
         return fee;
     }
 

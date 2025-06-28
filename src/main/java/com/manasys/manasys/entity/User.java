@@ -84,7 +84,7 @@ public class User {
      *
      * @return 用户id
      */
-    public long getUid() {
+    public Long getUid() {
         return uid;
     }
 

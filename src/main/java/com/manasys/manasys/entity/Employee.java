@@ -48,7 +48,7 @@ public class Employee {
         return Employee.class == o.getClass() && eid.equals(((Employee) o).eid);
     }
 
-    public long getEid() {
+    public Long getEid() {
         return eid;
     }
 

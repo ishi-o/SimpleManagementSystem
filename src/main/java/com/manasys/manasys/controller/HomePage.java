@@ -33,7 +33,7 @@ public class HomePage {
     }
 
     @ShellMethod(key = "reg-emp", value = "登记新员工")
-    public String registerEmployee(@ShellOption(help = "员工姓名") String ename) {
+    public String registerEmployee(String ename) {
         if (checkShellMode()) {
             empServ.register(ename);
             return "登记成功!";
@@ -82,7 +82,7 @@ public class HomePage {
     }
 
     @ShellMethod(key = "punch-in", value = "员工打卡")
-    public String punchIn(@ShellOption(help = "员工号") long eid) {
+    public String punchIn(Long eid) {
         if (checkShellMode()) {
             empServ.punchIn(eid);
             return "打卡成功!";
@@ -91,10 +91,16 @@ public class HomePage {
         }
     }
 
-    @ShellMethod(key = "get-punches", value = "查询员工在某年某月的打卡次数")
-    public String getPunches(@ShellOption(help = "员工号") long eid, @ShellOption(help = "年份") int year, @ShellOption(help = "月份") int month) {
+    @ShellMethod(key = "get-punches", value = "查询员工的打卡情况")
+    public String getPunches(@ShellOption(help = "员工号") Long eid, @ShellOption(help = "年份") Integer year, @ShellOption(help = "月份") Integer month) {
         if (checkShellMode()) {
-            return empServ.getPunches(eid, year, month);
+            if (year == null && month == null) {
+                return empServ.getPunches(eid);
+            } else if (year != null && month != null) {
+                return empServ.getPunches(eid, year, month);
+            } else {
+                return "没有这样的命令!";
+            }
         } else {
             return "用户状态异常: 您尚未登录管理员账号!";
         }
