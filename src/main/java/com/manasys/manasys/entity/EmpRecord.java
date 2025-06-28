@@ -1,13 +1,13 @@
 package com.manasys.manasys.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -18,32 +18,32 @@ import jakarta.persistence.Table;
 @Table(name = "emp_record", schema = "jhomework")
 public class EmpRecord {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "eid", referencedColumnName = "eid")
     private Employee employee;
 
     @Column(name = "check_date", nullable = false)
-    private Date checkdate;
+    private LocalDate checkDate;
 
     protected EmpRecord() {
     }
 
     @PersistenceCreator
-    protected EmpRecord(Employee emp, Date checkdate) {
+    protected EmpRecord(Employee emp, LocalDate checkDate) {
         this.employee = emp;
-        this.checkdate = checkdate;
+        this.checkDate = checkDate;
     }
 
-    public static EmpRecord newInstance(Employee emp, Date checkdate) {
-        return new EmpRecord(emp, checkdate);
+    public static EmpRecord newInstance(Employee emp, LocalDate checkDate) {
+        return new EmpRecord(emp, checkDate);
     }
 
     public Employee getEmployee() {
         return employee;
     }
 
-    public Date getDate() {
-        return checkdate;
+    public LocalDate getDate() {
+        return checkDate;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.manasys.manasys.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
@@ -28,19 +28,19 @@ public class Employee {
     private String ename;
 
     @Column(name = "joindate", nullable = false)
-    private Date joindate;
+    private LocalDate joinDate;
 
     protected Employee() {
     }
 
     @PersistenceCreator
-    protected Employee(String ename, Date joindate) {
+    protected Employee(String ename, LocalDate joinDate) {
         this.ename = ename;
-        this.joindate = joindate;
+        this.joinDate = joinDate;
     }
 
-    public static Employee newInstance(String ename, Date joindate) {
-        return new Employee(ename, joindate);
+    public static Employee newInstance(String ename, LocalDate joinDate) {
+        return new Employee(ename, joinDate);
     }
 
     public long getEid() {
@@ -51,8 +51,8 @@ public class Employee {
         return ename;
     }
 
-    public Date getJoindate() {
-        return joindate;
+    public LocalDate getJoindate() {
+        return joinDate;
     }
 
 }
