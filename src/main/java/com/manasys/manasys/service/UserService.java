@@ -11,6 +11,7 @@ import com.manasys.manasys.exception.signup.InvalidUsernameException;
 import com.manasys.manasys.exception.signup.UserAlreadyExistsException;
 import com.manasys.manasys.exception.userstate.UserAlreadyLoggedInByOthersException;
 import com.manasys.manasys.exception.userstate.UserAlreadyLoggedInException;
+import com.manasys.manasys.exception.userstate.UserNotLoggedInException;
 import com.manasys.manasys.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -83,12 +84,25 @@ public class UserService {
             throw new UserNotFoundException(username);
         });
         if (!user.getPassword().equals(password)) {
+            user = null;
             throw new PasswordMismatchException(password);
         } else if (user.getLoginStatus()) {
+            user = null;
             throw new UserAlreadyLoggedInByOthersException(username);
         } else {
             user.setLoginStatus(true);
             userRepo.save(user);
+        }
+    }
+
+    @Transactional
+    public void signOut() {
+        if (user == null) {
+            throw new UserNotLoggedInException();
+        } else {
+            user.setLoginStatus(false);
+            userRepo.save(user);
+            user = null;
         }
     }
 
