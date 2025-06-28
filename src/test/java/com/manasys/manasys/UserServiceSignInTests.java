@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.manasys.manasys.entity.User;
 import com.manasys.manasys.exception.signin.PasswordMismatchException;
-import com.manasys.manasys.exception.signin.UserAlreadyLoginException;
 import com.manasys.manasys.exception.signin.UserNotFoundException;
+import com.manasys.manasys.exception.userstate.UserAlreadyLoggedInException;
 import com.manasys.manasys.repository.UserRepository;
 import com.manasys.manasys.service.UserService;
 
@@ -66,7 +66,7 @@ public class UserServiceSignInTests {
         User user = User.newUserWithFullInfo(VALID_USERNAME, VALID_PASSWORD);
         user.setLoginStatus(true);
         when(userRepo.findByUsername(VALID_USERNAME)).thenReturn(Optional.of(user));
-        assertThrowsExactly(UserAlreadyLoginException.class, () -> {
+        assertThrowsExactly(UserAlreadyLoggedInException.class, () -> {
             userServ.signIn(VALID_USERNAME, VALID_PASSWORD);
         });
     }

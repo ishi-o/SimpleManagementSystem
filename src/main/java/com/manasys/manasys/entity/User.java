@@ -80,6 +80,15 @@ public class User {
     }
 
     /**
+     * 获取用户名
+     *
+     * @return 用户名
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
      * 获取用户密码
      *
      * @return 用户密码
