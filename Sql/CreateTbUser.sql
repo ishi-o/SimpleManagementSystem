@@ -15,6 +15,8 @@ CREATE TABLE jhomework.users (
 );
 SELECT * FROM jhomework.users;
 
+UPDATE jhomework.users SET login_status = false WHERE 1 = 1;
+
 -- INSERT INTO jhomework.users VALUES (
 --     1, 'testuser', 'TruePwd@1234'
 -- );

@@ -60,7 +60,7 @@ public class User {
      * @param password 用户密码
      * @return 如果用户名和用户密码合法, 将返回新的实例
      */
-    public static User newUserWithFullInfo(String username, String password) {
+    public static User newInstance(String username, String password) {
         return new User(username, password);
     }
 
@@ -84,7 +84,7 @@ public class User {
      *
      * @return 用户id
      */
-    public long getUid() {
+    public Long getUid() {
         return uid;
     }
 

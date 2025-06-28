@@ -37,7 +37,7 @@ public class UserServiceSignInTests {
 
     @Test
     void testValidSignin() {
-        User user = User.newUserWithFullInfo(VALID_USERNAME, VALID_PASSWORD);
+        User user = User.newInstance(VALID_USERNAME, VALID_PASSWORD);
         when(userRepo.findByUsername(VALID_USERNAME)).thenReturn(Optional.of(user));
         assertDoesNotThrow(() -> {
             userServ.signIn(VALID_USERNAME, VALID_PASSWORD);
@@ -54,7 +54,7 @@ public class UserServiceSignInTests {
 
     @Test
     void testPasswordMismatch() {
-        User user = User.newUserWithFullInfo(VALID_USERNAME, VALID_PASSWORD);
+        User user = User.newInstance(VALID_USERNAME, VALID_PASSWORD);
         when(userRepo.findByUsername(VALID_USERNAME)).thenReturn(Optional.of(user));
         assertThrowsExactly(PasswordMismatchException.class, () -> {
             userServ.signIn(VALID_USERNAME, "Mismatch@1234");
@@ -63,7 +63,7 @@ public class UserServiceSignInTests {
 
     @Test
     void testUserAlreadyLogin() {
-        User user = User.newUserWithFullInfo(VALID_USERNAME, VALID_PASSWORD);
+        User user = User.newInstance(VALID_USERNAME, VALID_PASSWORD);
         user.setLoginStatus(true);
         when(userRepo.findByUsername(VALID_USERNAME)).thenReturn(Optional.of(user));
         assertThrowsExactly(UserAlreadyLoggedInException.class, () -> {

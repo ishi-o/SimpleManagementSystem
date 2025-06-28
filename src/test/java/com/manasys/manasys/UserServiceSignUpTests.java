@@ -1,14 +1,14 @@
 package com.manasys.manasys;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -33,7 +33,7 @@ class UserServiceSignUpTests {
 
     @Test
     void signUpValidUser() {
-        User user = User.newUserWithFullInfo(VALID_USERNAME, VALID_PASSWORD);
+        User user = User.newInstance(VALID_USERNAME, VALID_PASSWORD);
         // 模拟VALID_USERNAME为合法的未注册用户
         when(userRepository.findByUsername(VALID_USERNAME)).thenReturn(Optional.empty());
         // 模拟调用Repo的save()时返回user
@@ -43,7 +43,7 @@ class UserServiceSignUpTests {
 
     @Test
     void signUpUserAlreadyExists() {
-        User user = User.newUserWithFullInfo(VALID_USERNAME, VALID_PASSWORD);
+        User user = User.newInstance(VALID_USERNAME, VALID_PASSWORD);
         when(userRepository.findByUsername(VALID_USERNAME)).thenReturn(Optional.of(user));
         assertThrowsExactly(UserAlreadyExistsException.class, () -> {   // 用户已存在
             userService.signUp(VALID_USERNAME, VALID_PASSWORD);

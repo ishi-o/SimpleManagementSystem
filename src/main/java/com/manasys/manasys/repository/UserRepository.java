@@ -3,6 +3,7 @@ package com.manasys.manasys.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.manasys.manasys.entity.User;
 
@@ -13,6 +14,7 @@ import com.manasys.manasys.entity.User;
  * @since 2025.6.25
  * @see JpaRepository
  */
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);

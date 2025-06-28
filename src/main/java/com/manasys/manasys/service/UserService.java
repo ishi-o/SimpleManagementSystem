@@ -10,8 +10,6 @@ import com.manasys.manasys.exception.signup.InvalidPasswordException;
 import com.manasys.manasys.exception.signup.InvalidUsernameException;
 import com.manasys.manasys.exception.signup.UserAlreadyExistsException;
 import com.manasys.manasys.exception.userstate.UserAlreadyLoggedInByOthersException;
-import com.manasys.manasys.exception.userstate.UserAlreadyLoggedInException;
-import com.manasys.manasys.exception.userstate.UserNotLoggedInException;
 import com.manasys.manasys.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -44,7 +42,6 @@ public class UserService {
      * @param username 用户名
      * @param password 用户密码
      * @return 新建用户
-     * @throws UserAlreadyLoggedInException 用户已登录时抛出
      * @throws UserAlreadyExistsException 用户存在时抛出
      * @throws InvalidUsernameException 用户名不合法时抛出
      * @throws InvalidPasswordException 密码不合法时抛出
@@ -52,16 +49,14 @@ public class UserService {
      */
     @Transactional
     public User signUp(String username, String password) {
-        if (user != null) {
-            throw new UserAlreadyLoggedInException(user.getUsername());
-        } else if (userRepo.findByUsername(username).isPresent()) {
+        if (userRepo.findByUsername(username).isPresent()) {
             throw new UserAlreadyExistsException(username);
         } else if (!username.matches("^[a-zA-Z0-9]{1,20}$")) {
             throw new InvalidUsernameException(username);
         } else if (!password.matches("^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=[^0-9]*[0-9])(?=[^@#$%&+=]*[@#$%&+=])[a-zA-Z0-9@#$%&+=]{8,20}$")) {
             throw new InvalidPasswordException(password);
         } else {
-            return userRepo.save(User.newUserWithFullInfo(username, password));
+            return userRepo.save(User.newInstance(username, password));
         }
     }
 
@@ -72,14 +67,10 @@ public class UserService {
      * @param password 用户密码
      * @throws UserNotFoundException 当用户不存在时抛出
      * @throws PasswordMismatchException 当密码不正确时抛出
-     * @throws UserAlreadyLoggedInException 当用户已登录时抛出
      * @throws UserAlreadyLoggedInByOthersException 当用户已在其它设备上登录时抛出
      */
     @Transactional
     public void signIn(String username, String password) {
-        if (user != null) {
-            throw new UserAlreadyLoggedInException(user.getUsername());
-        }
         user = userRepo.findByUsername(username).orElseThrow(() -> {
             throw new UserNotFoundException(username);
         });
@@ -97,23 +88,15 @@ public class UserService {
 
     @Transactional
     public void signOut() {
-        if (user == null) {
-            throw new UserNotLoggedInException();
-        } else {
-            user.setLoginStatus(false);
-            userRepo.save(user);
-            user = null;
-        }
+        user.setLoginStatus(false);
+        userRepo.save(user);
+        user = null;
     }
 
     @Transactional
     public void logOut() {
-        if (user == null) {
-            throw new UserNotLoggedInException();
-        } else {
-            userRepo.deleteById(user.getUid());
-            user = null;
-        }
+        userRepo.deleteById(user.getUid());
+        user = null;
     }
 
 }
