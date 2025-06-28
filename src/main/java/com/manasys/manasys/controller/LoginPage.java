@@ -8,6 +8,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import com.manasys.manasys.service.ShellMode;
 import com.manasys.manasys.service.UserService;
 
 /**
@@ -22,6 +23,9 @@ public class LoginPage {
 
     @Autowired
     private UserService userServ;
+
+    @Autowired
+    private ShellMode shellMode;
 
     /**
      * 注册用户方法的Shell交互
