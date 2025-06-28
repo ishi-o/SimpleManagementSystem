@@ -1,7 +1,5 @@
 package com.manasys.manasys.service;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -73,18 +71,16 @@ public class UserService {
      */
     @Transactional
     public void signIn(String username, String password) {
-        try {
-            user = userRepo.findByUsername(username).get();
-            if (!user.getPassword().equals(password)) {
-                throw new PasswordMismatchException(password);
-            } else if (user.getLoginStatus()) {
-                throw new UserAlreadyLoginException(username);
-            } else {
-                user.setLoginStatus(true);
-                userRepo.save(user);
-            }
-        } catch (NoSuchElementException e) {
+        user = userRepo.findByUsername(username).orElseThrow(() -> {
             throw new UserNotFoundException(username);
+        });
+        if (!user.getPassword().equals(password)) {
+            throw new PasswordMismatchException(password);
+        } else if (user.getLoginStatus()) {
+            throw new UserAlreadyLoginException(username);
+        } else {
+            user.setLoginStatus(true);
+            userRepo.save(user);
         }
     }
 
