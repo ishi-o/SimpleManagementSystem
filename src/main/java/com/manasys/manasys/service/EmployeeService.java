@@ -54,4 +54,14 @@ public class EmployeeService {
         }
     }
 
+    @Transactional
+    public String getPunches(long eid, int year, int month) {
+        if (empRepo.existsById(eid)) {
+            Employee emp = empRepo.findById(eid).get();
+            return "员工 \"" + emp.getEname() + "\" 于 " + year + " 年 " + month + " 月 共打卡 " + empRecordRepo.countByYearAndMonth(eid, year, month) + " 次!";
+        } else {
+            return "该员工不存在!";
+        }
+    }
+
 }

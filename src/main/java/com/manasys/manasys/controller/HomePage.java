@@ -91,4 +91,13 @@ public class HomePage {
         }
     }
 
+    @ShellMethod(key = "get-punches", value = "查询员工在某年某月的打卡次数")
+    public String getPunches(@ShellOption(help = "员工号") long eid, @ShellOption(help = "年份") int year, @ShellOption(help = "月份") int month) {
+        if (checkShellMode()) {
+            return empServ.getPunches(eid, year, month);
+        } else {
+            return "用户状态异常: 您尚未登录管理员账号!";
+        }
+    }
+
 }
