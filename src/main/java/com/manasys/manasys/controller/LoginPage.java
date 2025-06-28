@@ -10,8 +10,8 @@ import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.standard.commands.Quit;
 
 import com.manasys.manasys.service.InteractModeEnum;
+import com.manasys.manasys.service.ServiceManager;
 import com.manasys.manasys.service.ShellMode;
-import com.manasys.manasys.service.UserService;
 
 /**
  * 用户未登入界面, 提供注册、登录、退出、注销功能
@@ -24,7 +24,7 @@ import com.manasys.manasys.service.UserService;
 public class LoginPage implements Quit.Command {
 
     @Autowired
-    private UserService userServ;
+    private ServiceManager services;
 
     @Autowired
     private ShellMode shellMode;
@@ -44,7 +44,7 @@ public class LoginPage implements Quit.Command {
     public String signUp(@ShellOption(help = "用户名") String username, @ShellOption(help = "用户密码") String password) {
         if (checkShellMode()) {
             try {
-                userServ.signUp(username, password);
+                services.getService(ServiceType.USER_SERVICE).signUp(username, password);
                 return "注册成功!";
             } catch (Exception e) {
                 return e.getMessage();
@@ -65,7 +65,7 @@ public class LoginPage implements Quit.Command {
     public String signIn(@ShellOption(help = "用户名") String username, @ShellOption(help = "用户密码") String password) {
         if (checkShellMode()) {
             try {
-                userServ.signIn(username, password);
+                services.getService(ServiceType.USER_SERVICE).signIn(username, password);
                 shellMode.setCurrMode(InteractModeEnum.HOME);
                 return "登录成功!";
             } catch (Exception e) {
@@ -79,7 +79,7 @@ public class LoginPage implements Quit.Command {
     @ShellMethod(key = {"exit", "quit", "q"}, value = "退出程序")
     public void quit() {
         try {
-            userServ.signOut();
+            services.getService(ServiceType.USER_SERVICE).signOut();
         } finally {
             throw new ExitRequest();
         }

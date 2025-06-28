@@ -43,19 +43,19 @@ public class Client {
         return new Client(cname, phonenum, loc);
     }
 
-    Long getCid() {
+    public Long getCid() {
         return cid;
     }
 
-    String getClientName() {
+    public String getClientName() {
         return cname;
     }
 
-    String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phonenum;
     }
 
-    String getLocation() {
+    public String getLocation() {
         return loc;
     }
 }
