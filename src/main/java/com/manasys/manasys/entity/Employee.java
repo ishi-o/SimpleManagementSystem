@@ -24,10 +24,10 @@ public class Employee {
     @GeneratedValue
     private Long eid;
 
-    @Column(name = "ename")
+    @Column(name = "ename", nullable = false)
     private String ename;
 
-    @Column(name = "joindate")
+    @Column(name = "joindate", nullable = false)
     private Date joindate;
 
     protected Employee() {
@@ -39,7 +39,7 @@ public class Employee {
         this.joindate = joindate;
     }
 
-    public static Employee newEmployeeWithFullInfo(String ename, Date joindate) {
+    public static Employee newInstance(String ename, Date joindate) {
         return new Employee(ename, joindate);
     }
 

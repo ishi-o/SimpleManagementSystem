@@ -61,7 +61,7 @@ public class UserService {
         } else if (!password.matches("^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=[^0-9]*[0-9])(?=[^@#$%&+=]*[@#$%&+=])[a-zA-Z0-9@#$%&+=]{8,20}$")) {
             throw new InvalidPasswordException(password);
         } else {
-            return userRepo.save(User.newUserWithFullInfo(username, password));
+            return userRepo.save(User.newInstance(username, password));
         }
     }
 
