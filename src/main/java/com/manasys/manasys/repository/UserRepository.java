@@ -16,4 +16,5 @@ import com.manasys.manasys.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
+
 }

@@ -106,4 +106,14 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public void logOut() {
+        if (user == null) {
+            throw new UserNotLoggedInException();
+        } else {
+            userRepo.deleteById(user.getUid());
+            user = null;
+        }
+    }
+
 }

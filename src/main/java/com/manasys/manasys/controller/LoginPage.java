@@ -58,11 +58,31 @@ public class LoginPage {
     }
 
     @ShellMethod(key = {"exit", "quit", "q"}, value = "退出程序")
-    public void signOut() {
+    public void exit() {
         try {
             userServ.signOut();
         } finally {
             throw new ExitRequest();
+        }
+    }
+
+    @ShellMethod(key = "sign-out", value = "登出用户")
+    public String signOut() {
+        try {
+            userServ.signOut();
+            return "登出成功!";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @ShellMethod(key = "log-out", value = "注销本用户")
+    public String logOut() {
+        try {
+            userServ.logOut();
+            return "注销成功! 请重新登录!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
