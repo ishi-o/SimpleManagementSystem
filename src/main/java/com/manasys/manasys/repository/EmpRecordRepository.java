@@ -20,7 +20,7 @@ public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.
     @Query(value
             = """
             SELECT COUNT(1) 
-            FROM jhomework.emp_record AS er 
+            FROM jhomework.emp_records AS er 
             WHERE er.eid = ?1 AND 
                 EXTRACT(YEAR FROM er.check_date) = ?2 AND 
                 EXTRACT(MONTH FROM er.check_date) = ?3
@@ -48,7 +48,7 @@ public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.
                 mr.year,
                 mr.month,
                 COUNT(er.eid) AS cnt
-            FROM month_rg mr LEFT JOIN jhomework.emp_record er ON
+            FROM month_rg mr LEFT JOIN jhomework.emp_records er ON
                 er.eid = ?1 AND
                 EXTRACT(YEAR FROM er.check_date) = mr.year AND
                 EXTRACT(MONTH FROM er.check_date) = mr.month

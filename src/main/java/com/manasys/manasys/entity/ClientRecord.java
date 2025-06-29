@@ -1,6 +1,6 @@
 package com.manasys.manasys.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
  * @since 2025.6.28
  */
 @Entity
-@Table(name = "client_record", schema = "jhomework")
+@Table(name = "client_records", schema = "jhomework")
 public class ClientRecord {
 
     @Id
@@ -31,19 +31,19 @@ public class ClientRecord {
     private Client client;
 
     @Column(name = "visit_date", nullable = false)
-    private LocalDate visitDate;
+    private LocalDateTime visitDateTime;
 
     protected ClientRecord() {
     }
 
     @PersistenceCreator
-    protected ClientRecord(Client client, LocalDate visitDate) {
+    protected ClientRecord(Client client, LocalDateTime visitDateTime) {
         this.client = client;
-        this.visitDate = visitDate;
+        this.visitDateTime = visitDateTime;
     }
 
-    public static ClientRecord newInstance(Client client, LocalDate visitDate) {
-        return new ClientRecord(client, visitDate);
+    public static ClientRecord newInstance(Client client, LocalDateTime visitDateTime) {
+        return new ClientRecord(client, visitDateTime);
     }
 
     public Long getCid() {
@@ -54,8 +54,8 @@ public class ClientRecord {
         return client;
     }
 
-    public LocalDate getDate() {
-        return visitDate;
+    public LocalDateTime getDate() {
+        return visitDateTime;
     }
 
 }

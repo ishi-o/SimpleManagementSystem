@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
  * @since 2025.6.28
  */
 @Entity
-@Table(name = "emp_record", schema = "jhomework")
+@Table(name = "emp_records", schema = "jhomework")
 public class EmpRecord {
 
     @Embeddable
