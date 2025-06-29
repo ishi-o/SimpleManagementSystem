@@ -21,4 +21,11 @@ public interface ClientRecordRepository extends JpaRepository<ClientRecord, Long
             """, nativeQuery = true)
     List<Object[]> countAllClientsVisits();
 
+    @Query(value = """
+            SELECT COUNT(crid) cnt
+            FROM jhomework.client_record
+            WHERE cid = ?1
+            """, nativeQuery = true)
+    Long countVisitsByClientId(Long cid);
+
 }

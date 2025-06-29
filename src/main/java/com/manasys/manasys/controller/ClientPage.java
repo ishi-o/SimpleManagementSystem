@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 
 import com.manasys.manasys.service.ClientService;
 
@@ -44,8 +45,12 @@ public class ClientPage {
     }
 
     @ShellMethod(key = "get-visits", value = "查询所有客户的来访次数")
-    public String getVisits() {
-        return clientServ.getVisits();
+    public String getVisits(@ShellOption(help = "指定客户身份证号", defaultValue = "") Long cid) {
+        if (cid == null) {
+            return clientServ.getVisits();
+        } else {
+            return clientServ.getVisits(cid);
+        }
     }
 
 }
