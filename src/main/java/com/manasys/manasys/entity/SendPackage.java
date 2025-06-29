@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
  * @see Package
  */
 @Entity
-@Table(name = "send_pack", schema = "jhomework")
+@Table(name = "send_packages", schema = "jhomework")
 public class SendPackage extends Package {
 
     @OneToOne

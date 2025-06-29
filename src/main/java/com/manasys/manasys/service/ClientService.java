@@ -1,6 +1,6 @@
 package com.manasys.manasys.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class ClientService {
      */
     @Transactional
     public void visit(Long cid) {
-        cliRecordRepo.save(ClientRecord.newInstance(clientRepo.findById(cid).get(), LocalDate.now()));
+        cliRecordRepo.save(ClientRecord.newInstance(clientRepo.findById(cid).get(), LocalDateTime.now()));
     }
 
     /**

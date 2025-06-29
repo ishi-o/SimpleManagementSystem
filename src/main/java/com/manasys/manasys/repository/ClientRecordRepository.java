@@ -23,7 +23,7 @@ public interface ClientRecordRepository extends JpaRepository<ClientRecord, Long
      */
     @Query(value = """
             SELECT cid, COUNT(crid) cnt
-            FROM jhomework.client_record
+            FROM jhomework.client_records
             GROUP BY cid
             ORDER BY cid, cnt
             """, nativeQuery = true)
@@ -37,7 +37,7 @@ public interface ClientRecordRepository extends JpaRepository<ClientRecord, Long
      */
     @Query(value = """
             SELECT COUNT(crid) cnt
-            FROM jhomework.client_record
+            FROM jhomework.client_records
             WHERE cid = ?1
             """, nativeQuery = true)
     Long countVisitByClientId(Long cid);

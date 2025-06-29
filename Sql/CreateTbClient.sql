@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS jhomework.clients;
+
 CREATE TABLE jhomework.clients (
     cid BIGINT,
     cname VARCHAR(255) NOT NULL,

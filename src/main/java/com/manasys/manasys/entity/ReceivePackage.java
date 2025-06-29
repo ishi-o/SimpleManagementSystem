@@ -4,8 +4,10 @@ import java.time.LocalDate;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 /**
  * 接收的快递记录
@@ -14,6 +16,8 @@ import jakarta.persistence.ManyToOne;
  * @since 2025.6.28
  * @see Package
  */
+@Entity
+@Table(name = "recv_packages", schema = "jhomework")
 public class ReceivePackage extends Package {
 
     @ManyToOne

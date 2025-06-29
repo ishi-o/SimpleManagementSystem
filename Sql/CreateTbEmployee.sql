@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS jhomework.employees;
+
 CREATE TABLE jhomework.employees (
     eid BIGINT, 
     ename VARCHAR(255),
