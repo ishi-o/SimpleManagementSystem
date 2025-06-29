@@ -8,3 +8,5 @@ CREATE TABLE jhomework.clients (
 );
 
 SELECT * FROM jhomework.clients;
+
+DELETE FROM jhomework.clients WHERE 1=1;

@@ -33,29 +33,30 @@ public class Client {
     }
 
     @PersistenceCreator
-    protected Client(String cname, String phonenum, String loc) {
+    protected Client(Long cid, String cname, String phonenum, String loc) {
+        this.cid = cid;
         this.cname = cname;
         this.phonenum = phonenum;
         this.loc = loc;
     }
 
-    public static Client newInstance(String cname, String phonenum, String loc) {
-        return new Client(cname, phonenum, loc);
+    public static Client newInstance(Long cid, String cname, String phonenum, String loc) {
+        return new Client(cid, cname, phonenum, loc);
     }
 
-    Long getCid() {
+    public Long getCid() {
         return cid;
     }
 
-    String getClientName() {
+    public String getClientName() {
         return cname;
     }
 
-    String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phonenum;
     }
 
-    String getLocation() {
+    public String getLocation() {
         return loc;
     }
 }
