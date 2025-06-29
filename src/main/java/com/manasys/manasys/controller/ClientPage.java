@@ -7,7 +7,6 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import com.manasys.manasys.exception.client.ClientAlreadyExistException;
 import com.manasys.manasys.service.ClientService;
 
 /**
@@ -34,14 +33,13 @@ public class ClientPage {
      * @param phone 客户电话号码
      * @param loc 客户收件地址
      * @return 执行成功或失败的消息
-     * @throws ClientAlreadyExistException 当用户已经存在时
      */
     @ShellMethod(key = "reg-client", value = "登记新客户")
     public String registerClient(Long cid, String cname, String phone, String loc) {
         try {
             clientServ.register(cid, cname, phone, loc);
             return "登记成功!";
-        } catch (ClientAlreadyExistException e) {
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
@@ -73,10 +71,14 @@ public class ClientPage {
      */
     @ShellMethod(key = "get-visit", value = "查询所有客户的来访次数")
     public String getCountOfVisit(@ShellOption(help = "指定客户身份证号", defaultValue = "") Long cid) {
-        if (cid == null) {
-            return clientServ.getCountOfVisit();
-        } else {
-            return clientServ.getCountOfVisit(cid);
+        try {
+            if (cid == null) {
+                return clientServ.getCountOfVisit();
+            } else {
+                return clientServ.getCountOfVisit(cid);
+            }
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
@@ -88,10 +90,14 @@ public class ClientPage {
      */
     @ShellMethod(key = "get-client-info", value = "查询客户信息")
     public String getClientInfo(@ShellOption(help = "指定客户身份证号", defaultValue = "") Long cid) {
-        if (cid == null) {
-            return clientServ.getClientInfo();
-        } else {
-            return clientServ.getClientInfo(cid);
+        try {
+            if (cid == null) {
+                return clientServ.getClientInfo();
+            } else {
+                return clientServ.getClientInfo(cid);
+            }
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 

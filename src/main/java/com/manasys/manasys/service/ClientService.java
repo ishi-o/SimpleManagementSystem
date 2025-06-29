@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.manasys.manasys.entity.Client;
 import com.manasys.manasys.entity.ClientRecord;
 import com.manasys.manasys.exception.client.ClientAlreadyExistException;
+import com.manasys.manasys.exception.client.ClientNotFoundException;
 import com.manasys.manasys.repository.ClientRecordRepository;
 import com.manasys.manasys.repository.ClientRepository;
 
@@ -37,6 +38,7 @@ public class ClientService {
      * @param cname 客户姓名
      * @param phone 客户手机号码
      * @param loc 客户收件地址
+     * @throws ClientAlreadyExistException 当客户已经存在时
      */
     @Transactional
     public void register(Long cid, String cname, String phone, String loc) {
@@ -48,7 +50,7 @@ public class ClientService {
     }
 
     /**
-     * 事务: 登记客户来访, 自动获取今日作为来访日期
+     * 事务: 登记客户来访, 自动获取现在作为来访的日期及时间
      *
      * @param cid 客户的身份证号
      */
@@ -88,10 +90,15 @@ public class ClientService {
      *
      * @param cid 客户身份证号
      * @return 身份证号为 {@code cid} 的客户的来访次数记录
+     * @throws ClientNotFoundException 当客户不存在时
      */
     @Transactional
     public String getCountOfVisit(Long cid) {
-        return "身份证号为 \"" + cid + "\" 的客户总共来访 " + cliRecordRepo.countVisitByClientId(cid) + " 次!";
+        if (clientRepo.existsById(cid)) {
+            return "身份证号为 \"" + cid + "\" 的客户总共来访 " + cliRecordRepo.countVisitByClientId(cid) + " 次!";
+        } else {
+            throw new ClientNotFoundException();
+        }
     }
 
     /**
@@ -114,10 +121,13 @@ public class ClientService {
      *
      * @param cid 客户的身份证号
      * @return 身份证号为 {@code cid} 的客户的个人信息
+     * @throws ClientNotFoundException 当客户不存在时
      */
     @Transactional
     public String getClientInfo(Long cid) {
-        Client c = clientRepo.findById(cid).orElseThrow();
+        Client c = clientRepo.findById(cid).orElseThrow(() -> {
+            throw new ClientNotFoundException();
+        });
         return "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址\r\n" + c.getCid() + "\t\t\t" + c.getClientName() + "\t\t" + c.getPhoneNumber() + "\t\t\t" + c.getLocation();
     }
 }
