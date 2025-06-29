@@ -9,8 +9,8 @@ package com.manasys.manasys.exception.userstate;
  */
 public class UserAlreadyLoggedInException extends UserStateException {
 
-    public UserAlreadyLoggedInException(String username) {
-        super("已有用户 \"" + username + "\" 登录! 请先登出!");
+    public UserAlreadyLoggedInException() {
+        super("用户已登录! 请先登出!");
     }
 
 }

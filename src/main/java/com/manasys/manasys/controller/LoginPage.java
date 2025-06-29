@@ -9,8 +9,8 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.standard.commands.Quit;
 
-import com.manasys.manasys.service.InteractModeEnum;
-import com.manasys.manasys.service.ShellMode;
+import com.manasys.manasys.service.InterfaceService;
+import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 import com.manasys.manasys.service.UserService;
 
 /**
@@ -27,11 +27,7 @@ public class LoginPage implements Quit.Command {
     private UserService userServ;
 
     @Autowired
-    private ShellMode shellMode;
-
-    private boolean checkShellMode() {
-        return shellMode.getCurrMode().equals(InteractModeEnum.LOGIN);
-    }
+    private InterfaceService interfaceServ;
 
     /**
      * 注册用户方法的Shell交互
@@ -42,15 +38,12 @@ public class LoginPage implements Quit.Command {
      */
     @ShellMethod(key = "sign-up", value = "注册用户")
     public String signUp(@ShellOption(help = "用户名") String username, @ShellOption(help = "用户密码") String password) {
-        if (checkShellMode()) {
-            try {
-                userServ.signUp(username, password);
-                return "注册成功!";
-            } catch (Exception e) {
-                return e.getMessage();
-            }
-        } else {
-            return "用户状态异常: 您已登录, 无法使用注册功能!";
+        try {
+            interfaceServ.checkCurrMode(InterfaceMode.LOGIN);
+            userServ.signUp(username, password);
+            return "注册成功!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
@@ -63,16 +56,13 @@ public class LoginPage implements Quit.Command {
      */
     @ShellMethod(key = "sign-in", value = "登录用户")
     public String signIn(@ShellOption(help = "用户名") String username, @ShellOption(help = "用户密码") String password) {
-        if (checkShellMode()) {
-            try {
-                userServ.signIn(username, password);
-                shellMode.setCurrMode(InteractModeEnum.HOME);
-                return "登录成功!";
-            } catch (Exception e) {
-                return e.getMessage();
-            }
-        } else {
-            return "用户状态异常: 您已登录, 无法使用登录功能!";
+        try {
+            interfaceServ.checkCurrMode(InterfaceMode.LOGIN);
+            userServ.signIn(username, password);
+            interfaceServ.setCurrMode(InterfaceMode.HOME);
+            return "登录成功!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 

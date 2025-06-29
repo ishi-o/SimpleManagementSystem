@@ -8,6 +8,8 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import com.manasys.manasys.service.ClientService;
+import com.manasys.manasys.service.InterfaceService;
+import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 
 /**
  * @author 刘洛松
@@ -20,6 +22,9 @@ public class ClientPage {
 
     @Autowired
     private ClientService clientServ;
+
+    @Autowired
+    private InterfaceService interfaceServ;
 
     public ClientPage(@Lazy LineReader sin) {
         this.sin = sin;
@@ -37,6 +42,7 @@ public class ClientPage {
     @ShellMethod(key = "reg-client", value = "登记新客户")
     public String registerClient(Long cid, String cname, String phone, String loc) {
         try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
             clientServ.register(cid, cname, phone, loc);
             return "登记成功!";
         } catch (Exception e) {
@@ -52,15 +58,20 @@ public class ClientPage {
      */
     @ShellMethod(key = "visit", value = "记录客户来访")
     public String visit(Long cid) {
-        if (!clientServ.contains(cid)) {
-            String cname = sin.readLine("客户首次来访, 需要登记信息: \r\n请输入客户姓名: ");
-            String phonenum = sin.readLine("请输入客户电话号码: ");
-            String loc = sin.readLine("请输入客户收件地址: ");
-            clientServ.register(cid, cname, phonenum, loc);
-            System.out.println("登记成功!");
+        try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
+            if (!clientServ.contains(cid)) {
+                String cname = sin.readLine("客户首次来访, 需要登记信息: \r\n请输入客户姓名: ");
+                String phonenum = sin.readLine("请输入客户电话号码: ");
+                String loc = sin.readLine("请输入客户收件地址: ");
+                clientServ.register(cid, cname, phonenum, loc);
+                System.out.println("登记成功!");
+            }
+            clientServ.visit(cid);
+            return "记录客户来访成功!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        clientServ.visit(cid);
-        return "记录客户来访成功!";
     }
 
     /**
@@ -72,6 +83,7 @@ public class ClientPage {
     @ShellMethod(key = "get-visit", value = "查询所有客户的来访次数")
     public String getCountOfVisit(@ShellOption(help = "指定客户身份证号", defaultValue = "") Long cid) {
         try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (cid == null) {
                 return clientServ.getCountOfVisit();
             } else {
@@ -91,6 +103,7 @@ public class ClientPage {
     @ShellMethod(key = "get-client-info", value = "查询客户信息")
     public String getClientInfo(@ShellOption(help = "指定客户身份证号", defaultValue = "") Long cid) {
         try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (cid == null) {
                 return clientServ.getClientInfo();
             } else {
