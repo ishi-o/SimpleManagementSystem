@@ -53,4 +53,13 @@ public class ClientPage {
         }
     }
 
+    @ShellMethod(key = "get-client-info", value = "查询客户信息")
+    public String getClientInfo(@ShellOption(help = "指定客户身份证号", defaultValue = "") Long cid) {
+        if (cid == null) {
+            return clientServ.getClientInfo();
+        } else {
+            return clientServ.getClientInfo(cid);
+        }
+    }
+
 }

@@ -57,7 +57,7 @@ public class ClientService {
     @Transactional
     public String getVisits() {
         List<Object[]> list = cliRecordRepo.countAllClientsVisits();
-        String ans = "\r\n客户身份证号\t\t客户来访次数";
+        String ans = "客户身份证号\t\t客户来访次数";
         for (Object[] tup : list) {
             ans += "\r\n" + tup[0] + "\t\t\t" + tup[1];
         }
@@ -67,5 +67,21 @@ public class ClientService {
     @Transactional
     public String getVisits(Long cid) {
         return "身份证号为 \"" + cid + "\" 的客户总共来访 " + cliRecordRepo.countVisitsByClientId(cid) + " 次!";
+    }
+
+    @Transactional
+    public String getClientInfo() {
+        List<Client> list = clientRepo.findAll();
+        String ans = "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址";
+        for (Client c : list) {
+            ans += "\r\n" + c.getCid() + "\t\t\t" + c.getClientName() + "\t\t" + c.getPhoneNumber() + "\t\t\t" + c.getLocation();
+        }
+        return ans;
+    }
+
+    @Transactional
+    public String getClientInfo(Long cid) {
+        Client c = clientRepo.findById(cid).orElseThrow();
+        return "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址\r\n" + c.getCid() + "\t\t\t" + c.getClientName() + "\t\t" + c.getPhoneNumber() + "\t\t\t" + c.getLocation();
     }
 }
