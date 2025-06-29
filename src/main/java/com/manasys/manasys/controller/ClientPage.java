@@ -43,4 +43,9 @@ public class ClientPage {
         return "记录客户来访成功!";
     }
 
+    @ShellMethod(key = "get-visits", value = "查询所有客户的来访次数")
+    public String getVisits() {
+        return clientServ.getVisits();
+    }
+
 }

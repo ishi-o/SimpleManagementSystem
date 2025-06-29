@@ -54,7 +54,13 @@ public class ClientService {
         return clientRepo.existsById(cid);
     }
 
-    // @Transactional
-    // public String getVisits(Long cid) {
-    // }
+    @Transactional
+    public String getVisits() {
+        List<Object[]> list = cliRecordRepo.countAllClientsVisits();
+        String ans = "\r\n客户身份证号\t\t客户来访次数";
+        for (Object[] tup : list) {
+            ans += "\r\n" + tup[0] + "\t\t" + tup[1];
+        }
+        return ans;
+    }
 }
