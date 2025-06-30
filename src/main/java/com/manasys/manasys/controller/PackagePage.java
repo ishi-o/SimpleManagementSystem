@@ -1,6 +1,5 @@
 package com.manasys.manasys.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -17,11 +16,14 @@ import com.manasys.manasys.service.PackageService;
 @ShellComponent
 public class PackagePage {
 
-    @Autowired
-    private InterfaceService interfaceServ;
+    private final InterfaceService interfaceServ;
 
-    @Autowired
-    private PackageService pkgServ;
+    private final PackageService pkgServ;
+
+    public PackagePage(InterfaceService interfaceServ, PackageService pkgServ) {
+        this.interfaceServ = interfaceServ;
+        this.pkgServ = pkgServ;
+    }
 
     @ShellMethod(key = "send-package", value = "登记发送快递")
     public String sendPackage(Long crid, Integer fee) {

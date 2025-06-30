@@ -1,6 +1,5 @@
 package com.manasys.manasys.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -17,11 +16,14 @@ import com.manasys.manasys.service.UserService;
 @ShellComponent
 public class HomePage {
 
-    @Autowired
-    private UserService userServ;
+    private final UserService userServ;
 
-    @Autowired
-    private InterfaceService interfaceServ;
+    private final InterfaceService interfaceServ;
+
+    public HomePage(UserService userServ, InterfaceService interfaceServ) {
+        this.userServ = userServ;
+        this.interfaceServ = interfaceServ;
+    }
 
     /**
      * 命令: 管理员登出

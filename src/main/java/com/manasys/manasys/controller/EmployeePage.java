@@ -1,11 +1,13 @@
 package com.manasys.manasys.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import com.manasys.manasys.service.EmployeeService;
+import com.manasys.manasys.service.CommonRecordService;
 import com.manasys.manasys.service.InterfaceService;
 import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 
@@ -18,11 +20,14 @@ import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 @ShellComponent
 public class EmployeePage {
 
-    @Autowired
-    private EmployeeService empServ;
+    private final Map<String, CommonRecordService> services;
 
-    @Autowired
-    private InterfaceService interfaceServ;
+    private final InterfaceService interfaceServ;
+
+    public EmployeePage(Map<String, CommonRecordService> services, InterfaceService interfaceServ) {
+        this.services = services;
+        this.interfaceServ = interfaceServ;
+    }
 
     /**
      * 命令: 登记新员工
@@ -34,7 +39,9 @@ public class EmployeePage {
     public String registerEmployee(String ename) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            empServ.register(ename);
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", ename);
+            services.get("employeeService").registerEntity(map);
             return "登记成功!";
         } catch (Exception e) {
             return e.getMessage();
@@ -50,7 +57,7 @@ public class EmployeePage {
     public String viewAllEmployees() {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            return empServ.getEmployeeInfo();
+            return services.get("employeeService").getEntityInfo();
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -66,7 +73,7 @@ public class EmployeePage {
     public String punchIn(Long eid) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            empServ.punchIn(eid);
+            services.get("employeeService").record(eid);
             return "打卡成功!";
         } catch (Exception e) {
             return e.getMessage();
@@ -86,9 +93,9 @@ public class EmployeePage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (year == null && month == null) {
-                return empServ.getCountOfPunch(eid);
+                return services.get("employeeService").getRecordCount(eid);
             } else if (year != null && month != null) {
-                return empServ.getCountOfPunch(eid, year, month);
+                return services.get("employeeService").getRecordCount(eid, year, month);
             } else {
                 return "没有这样的命令!";
             }
