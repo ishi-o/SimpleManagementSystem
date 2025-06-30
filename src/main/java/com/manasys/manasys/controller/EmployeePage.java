@@ -50,7 +50,7 @@ public class EmployeePage {
     public String viewAllEmployees() {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            return empServ.viewAllEmployees();
+            return empServ.getEmployeeInfo();
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -86,9 +86,9 @@ public class EmployeePage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (year == null && month == null) {
-                return empServ.getPunches(eid);
+                return empServ.getCountOfPunch(eid);
             } else if (year != null && month != null) {
-                return empServ.getPunches(eid, year, month);
+                return empServ.getCountOfPunch(eid, year, month);
             } else {
                 return "没有这样的命令!";
             }
