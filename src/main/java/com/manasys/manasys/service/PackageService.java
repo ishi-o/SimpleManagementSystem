@@ -44,4 +44,9 @@ public class PackageService {
         spRepo.save(SendPackage.newInstance(LocalDateTime.now(), crRepo.findById(crid).orElseThrow(), fee));
     }
 
+    @Transactional
+    public String getFee(Integer year, Integer month) {
+        return year + " 年 " + month + " 月发送快递总共消耗 " + spRepo.countByYearAndMonth(year, month) + " 元!";
+    }
+
 }

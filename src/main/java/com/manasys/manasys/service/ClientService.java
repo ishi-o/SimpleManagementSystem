@@ -130,4 +130,15 @@ public class ClientService {
         });
         return "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址\r\n" + c.getCid() + "\t\t\t" + c.getClientName() + "\t\t" + c.getPhoneNumber() + "\t\t\t" + c.getLocation();
     }
+
+    @Transactional
+    public String getClientVisitInfo() {
+        String ans = "客户来访编号\t\t客户身份证号\t\t客户来访时间";
+        List<ClientRecord> list = cliRecordRepo.findAll();
+        for (ClientRecord cr : list) {
+            ans += "\r\n" + cr.getCrid() + "\t\t\t" + cr.getClient().getCid() + "\t\t\t" + cr.getDateTime();
+        }
+        return ans;
+    }
+
 }

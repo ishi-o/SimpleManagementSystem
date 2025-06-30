@@ -116,4 +116,13 @@ public class ClientPage {
         }
     }
 
+    @ShellMethod(key = "get-visit-info", value = "获取所有客户的来访记录")
+    public String getClientVisitInfo() {
+        try {
+            return clientServ.getClientVisitInfo();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
 }
