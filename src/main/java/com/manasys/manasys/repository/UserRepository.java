@@ -17,6 +17,12 @@ import com.manasys.manasys.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    /**
+     * 根据主键 {@code username} 查找用户
+     *
+     * @param username 用户名
+     * @return {@code Optional<User>}
+     */
     Optional<User> findByUsername(String username);
 
 }

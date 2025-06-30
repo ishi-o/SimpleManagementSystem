@@ -17,6 +17,14 @@ import com.manasys.manasys.entity.EmpRecord;
 @Repository
 public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.EmpRecordPK> {
 
+    /**
+     * 统计指定员工在指定年份指定月份的打卡次数
+     *
+     * @param eid 指定的员工编号
+     * @param year 指定的年份
+     * @param month 指定的月份
+     * @return 员工在 {@code year} 年 {@code month} 月的总共打卡次数
+     */
     @Query(value
             = """
             SELECT COUNT(1) 
@@ -24,10 +32,15 @@ public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.
             WHERE er.eid = ?1 AND 
                 EXTRACT(YEAR FROM er.check_date) = ?2 AND 
                 EXTRACT(MONTH FROM er.check_date) = ?3
-            """,
-            nativeQuery = true)
+            """, nativeQuery = true)
     Long countByYearAndMonth(Long eid, Integer year, Integer month);
 
+    /**
+     * 统计指定员工入职以来所有月份的打卡次数
+     *
+     * @param eid 指定的员工编号
+     * @return (年份, 月份, 在该年该月的打卡次数)列表, 包含入职以来的所有打卡记录, 以(年份, 月份)升序排序
+     */
     @Query(value
             = """
             WITH emp_joindate AS (
@@ -54,7 +67,6 @@ public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.
                 EXTRACT(MONTH FROM er.check_date) = mr.month
             GROUP BY mr.year, mr.month
             ORDER BY mr.year, mr.month
-            """,
-            nativeQuery = true)
+            """, nativeQuery = true)
     List<Object[]> countFromJoinDate(Long eid);
 }

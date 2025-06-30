@@ -15,7 +15,7 @@ import com.manasys.manasys.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 /**
- * 提供用户服务
+ * 提供针对管理员账户的服务
  *
  * @author 刘洛松
  * @since 2025.6.25
@@ -87,6 +87,9 @@ public class UserService {
         }
     }
 
+    /**
+     * 事务: 用户登出
+     */
     @Transactional
     public void signOut() {
         user.setLoginStatus(false);
@@ -94,6 +97,9 @@ public class UserService {
         user = null;
     }
 
+    /**
+     * 事务: 用户注销
+     */
     @Transactional
     public void logOut() {
         userRepo.deleteById(user.getUid());

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
-import com.manasys.manasys.service.InteractModeEnum;
-import com.manasys.manasys.service.ShellMode;
+import com.manasys.manasys.service.InterfaceService;
+import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 import com.manasys.manasys.service.UserService;
 
 /**
@@ -21,39 +21,39 @@ public class HomePage {
     private UserService userServ;
 
     @Autowired
-    private ShellMode shellMode;
+    private InterfaceService interfaceServ;
 
-    private boolean checkShellMode() {
-        return shellMode.getCurrMode().equals(InteractModeEnum.HOME);
-    }
-
+    /**
+     * 命令: 管理员登出
+     *
+     * @return 命令执行成功或失败的提示
+     */
     @ShellMethod(key = "sign-out", value = "登出用户")
     public String signOut() {
-        if (checkShellMode()) {
-            try {
-                userServ.signOut();
-                shellMode.setCurrMode(InteractModeEnum.LOGIN);
-                return "登出成功!";
-            } catch (Exception e) {
-                return e.getMessage();
-            }
-        } else {
-            return "用户状态异常: 您尚未登录管理员账号!";
+        try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
+            userServ.signOut();
+            interfaceServ.setCurrMode(InterfaceMode.LOGIN);
+            return "登出成功!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
+    /**
+     * 命令: 管理员账号注销
+     *
+     * @return 命令执行成功或失败的提示
+     */
     @ShellMethod(key = "log-out", value = "注销本用户")
     public String logOut() {
-        if (checkShellMode()) {
-            try {
-                userServ.logOut();
-                shellMode.setCurrMode(InteractModeEnum.LOGIN);
-                return "注销成功! 请重新登录!";
-            } catch (Exception e) {
-                return e.getMessage();
-            }
-        } else {
-            return "用户状态异常: 您尚未登录管理员账号!";
+        try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
+            userServ.logOut();
+            interfaceServ.setCurrMode(InterfaceMode.LOGIN);
+            return "注销成功! 请重新登录!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
