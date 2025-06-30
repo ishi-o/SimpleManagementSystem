@@ -1,11 +1,13 @@
 package com.manasys.manasys.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import com.manasys.manasys.service.EmployeeService;
+import com.manasys.manasys.service.CommonRecordService;
 import com.manasys.manasys.service.InterfaceService;
 import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 
@@ -18,11 +20,14 @@ import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 @ShellComponent
 public class EmployeePage {
 
-    @Autowired
-    private EmployeeService empServ;
+    private final Map<String, CommonRecordService> services;
 
-    @Autowired
-    private InterfaceService interfaceServ;
+    private final InterfaceService interfaceServ;
+
+    public EmployeePage(Map<String, CommonRecordService> services, InterfaceService interfaceServ) {
+        this.services = services;
+        this.interfaceServ = interfaceServ;
+    }
 
     /**
      * 命令: 登记新员工
@@ -31,10 +36,15 @@ public class EmployeePage {
      * @return 命令执行成功或失败的提示
      */
     @ShellMethod(key = "reg-emp", value = "登记新员工")
-    public String registerEmployee(String ename) {
+    public String registerEmployee(@ShellOption(help = "员工姓名", defaultValue = "") String ename) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            empServ.register(ename);
+            if (ename == null) {
+                return "请提供员工姓名! (reg-emp ename)";
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", ename);
+            services.get("employeeService").registerEntity(map);
             return "登记成功!";
         } catch (Exception e) {
             return e.getMessage();
@@ -50,7 +60,7 @@ public class EmployeePage {
     public String viewAllEmployees() {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            return empServ.getEmployeeInfo();
+            return services.get("employeeService").getEntityInfo();
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -63,10 +73,13 @@ public class EmployeePage {
      * @return 命令执行成功或失败的提示
      */
     @ShellMethod(key = "punch-in", value = "员工打卡")
-    public String punchIn(Long eid) {
+    public String punchIn(@ShellOption(help = "员工编号", defaultValue = "") Long eid) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            empServ.punchIn(eid);
+            if (eid == null) {
+                return "请提供员工编号! (punch-in eid)";
+            }
+            services.get("employeeService").record(eid);
             return "打卡成功!";
         } catch (Exception e) {
             return e.getMessage();
@@ -82,13 +95,15 @@ public class EmployeePage {
      * @return 若不指定年份和月份, 则返回员工入职以来所有月份的打卡情况; 否则返回员工在指定月份的打卡情况
      */
     @ShellMethod(key = "get-punch", value = "查询员工的打卡情况")
-    public String getPunches(@ShellOption(help = "员工号") Long eid, @ShellOption(help = "年份") Integer year, @ShellOption(help = "月份") Integer month) {
+    public String getPunches(@ShellOption(help = "员工号", defaultValue = "") Long eid, @ShellOption(help = "年份", defaultValue = "") Integer year, @ShellOption(help = "月份", defaultValue = "") Integer month) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            if (year == null && month == null) {
-                return empServ.getCountOfPunch(eid);
+            if (eid == null) {
+                return "请提供员工编号! (get-punch eid [year] [month])";
+            } else if (year == null && month == null) {
+                return services.get("employeeService").getRecordCount(eid);
             } else if (year != null && month != null) {
-                return empServ.getCountOfPunch(eid, year, month);
+                return services.get("employeeService").getRecordCount(eid, year, month);
             } else {
                 return "没有这样的命令!";
             }

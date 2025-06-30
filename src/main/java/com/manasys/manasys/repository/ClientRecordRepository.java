@@ -16,6 +16,24 @@ import com.manasys.manasys.entity.ClientRecord;
  */
 public interface ClientRecordRepository extends JpaRepository<ClientRecord, Long> {
 
+    @Query(value = """
+            SELECT crid, visit_date
+            FROM jhomework.client_records
+            WHERE cid = ?1
+            ORDER BY visit_date
+            """, nativeQuery = true)
+    List<Object[]> findByCid(Long cid);
+
+    @Query(value = """
+            SELECT crid, visit_date
+            FROM jhomework.client_records
+            WHERE cid = ?1 AND 
+                EXTRACT(YEAR FROM visit_date) = ?2 AND
+                EXTRACT(MONTH FROM visit_date) = ?3
+            ORDER BY visit_date
+            """, nativeQuery = true)
+    List<Object[]> findByCidAndYearAndMonth(Long cid, Integer year, Integer month);
+
     /**
      * 统计所有客户的总共来访次数
      *
@@ -27,7 +45,7 @@ public interface ClientRecordRepository extends JpaRepository<ClientRecord, Long
             GROUP BY cid
             ORDER BY cid, cnt
             """, nativeQuery = true)
-    List<Object[]> countVisitAll();
+    List<Object[]> countRecordGroupByCid();
 
     /**
      * 统计指定客户的来访次数
@@ -40,6 +58,15 @@ public interface ClientRecordRepository extends JpaRepository<ClientRecord, Long
             FROM jhomework.client_records
             WHERE cid = ?1
             """, nativeQuery = true)
-    Long countVisitByClientId(Long cid);
+    Long countRecordByCid(Long cid);
+
+    @Query(value = """
+            SELECT COUNT(crid) cnt
+            FROM jhomework.client_records
+            WHERE cid = ?1 AND
+                EXTRACT(YEAR FROM visit_date) = ?2 AND
+                EXTRACT(MONTH FROM visit_date) = ?3
+            """, nativeQuery = true)
+    Long countRecordByCidAndYearAndMonth(Long cid, Integer year, Integer month);
 
 }

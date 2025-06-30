@@ -1,6 +1,5 @@
 package com.manasys.manasys.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.shell.ExitRequest;
@@ -23,11 +22,14 @@ import com.manasys.manasys.service.UserService;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class LoginPage implements Quit.Command {
 
-    @Autowired
-    private UserService userServ;
+    private final UserService userServ;
 
-    @Autowired
-    private InterfaceService interfaceServ;
+    private final InterfaceService interfaceServ;
+
+    public LoginPage(UserService userServ, InterfaceService interfaceServ) {
+        this.userServ = userServ;
+        this.interfaceServ = interfaceServ;
+    }
 
     /**
      * 注册用户方法的Shell交互

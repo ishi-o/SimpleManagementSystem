@@ -1,13 +1,15 @@
 package com.manasys.manasys.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jline.reader.LineReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import com.manasys.manasys.service.ClientService;
+import com.manasys.manasys.service.CommonRecordService;
 import com.manasys.manasys.service.InterfaceService;
 import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 
@@ -22,14 +24,14 @@ public class ClientPage {
 
     private final LineReader sin;
 
-    @Autowired
-    private ClientService clientServ;
+    private final Map<String, CommonRecordService> services;
 
-    @Autowired
-    private InterfaceService interfaceServ;
+    private final InterfaceService interfaceServ;
 
-    public ClientPage(@Lazy LineReader sin) {
+    public ClientPage(@Lazy LineReader sin, Map<String, CommonRecordService> map, InterfaceService interfaceServ) {
         this.sin = sin;
+        this.services = map;
+        this.interfaceServ = interfaceServ;
     }
 
     /**
@@ -42,10 +44,18 @@ public class ClientPage {
      * @return 执行成功或失败的消息
      */
     @ShellMethod(key = "reg-client", value = "登记新客户")
-    public String registerClient(Long cid, String cname, String phone, String loc) {
+    public String registerClient(@ShellOption(help = "客户身份证号", defaultValue = "") Long cid, @ShellOption(help = "客户姓名", defaultValue = "") String cname, @ShellOption(help = "客户电话号码", defaultValue = "") String phone, @ShellOption(help = "客户收件地址", defaultValue = "") String loc) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            clientServ.register(cid, cname, phone, loc);
+            if (cid == null || cname == null || phone == null || loc == null) {
+                return "请提供足够的信息! (reg-client cid cname phone location)";
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", cid);
+            map.put("name", cname);
+            map.put("phone", phone);
+            map.put("location", loc);
+            services.get("clientService").registerEntity(map);
             return "登记成功!";
         } catch (Exception e) {
             return e.getMessage();
@@ -59,17 +69,24 @@ public class ClientPage {
      * @return 执行成功或失败的消息
      */
     @ShellMethod(key = "visit", value = "记录客户来访")
-    public String visit(Long cid) {
+    public String visit(@ShellOption(help = "客户身份证号", defaultValue = "") Long cid) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            if (!clientServ.contains(cid)) {
+            if (cid == null) {
+                return "请提供客户的身份证号! (visit cid)";
+            } else if (!services.get("clientService").containsEntity(cid)) {
                 String cname = sin.readLine("客户首次来访, 需要登记信息: \r\n请输入客户姓名: ");
                 String phonenum = sin.readLine("请输入客户电话号码: ");
                 String loc = sin.readLine("请输入客户收件地址: ");
-                clientServ.register(cid, cname, phonenum, loc);
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", cid);
+                map.put("name", cname);
+                map.put("phone", phonenum);
+                map.put("location", loc);
+                services.get("clientService").registerEntity(map);
                 System.out.println("登记成功!");
             }
-            clientServ.visit(cid);
+            services.get("clientService").record(cid);
             return "记录客户来访成功!";
         } catch (Exception e) {
             return e.getMessage();
@@ -87,9 +104,9 @@ public class ClientPage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (cid == null) {
-                return clientServ.getCountOfVisit();
+                return services.get("clientService").getRecordCount();
             } else {
-                return clientServ.getCountOfVisit(cid);
+                return services.get("clientService").getRecordCount(cid);
             }
         } catch (Exception e) {
             return e.getMessage();
@@ -107,9 +124,9 @@ public class ClientPage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (cid == null) {
-                return clientServ.getClientInfo();
+                return services.get("clientService").getEntityInfo();
             } else {
-                return clientServ.getClientInfo(cid);
+                return services.get("clientService").getEntityInfo(cid);
             }
         } catch (Exception e) {
             return e.getMessage();
@@ -119,7 +136,7 @@ public class ClientPage {
     @ShellMethod(key = "get-visit-info", value = "获取所有客户的来访记录")
     public String getClientVisitInfo() {
         try {
-            return clientServ.getClientVisitInfo();
+            return services.get("clientService").getRecordInfo();
         } catch (Exception e) {
             return e.getMessage();
         }
