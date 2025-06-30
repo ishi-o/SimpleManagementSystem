@@ -1,6 +1,6 @@
 package com.manasys.manasys.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
@@ -28,13 +28,13 @@ public class ReceivePackage extends Package {
     }
 
     @PersistenceCreator
-    protected ReceivePackage(LocalDate procDate, Employee emp) {
-        super(procDate);
+    protected ReceivePackage(LocalDateTime procDateTime, Employee emp) {
+        super(procDateTime);
         this.emp = emp;
     }
 
-    public static ReceivePackage newInstance(LocalDate procDate, Employee emp) {
-        return new ReceivePackage(procDate, emp);
+    public static ReceivePackage newInstance(LocalDateTime procDateTime, Employee emp) {
+        return new ReceivePackage(procDateTime, emp);
     }
 
     public Employee getEmployee() {

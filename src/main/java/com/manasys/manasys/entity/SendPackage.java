@@ -1,6 +1,6 @@
 package com.manasys.manasys.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
@@ -32,14 +32,14 @@ public class SendPackage extends Package {
     }
 
     @PersistenceCreator
-    protected SendPackage(LocalDate procDate, ClientRecord clientRecord, Integer fee) {
-        super(procDate);
+    protected SendPackage(LocalDateTime procDateTime, ClientRecord clientRecord, Integer fee) {
+        super(procDateTime);
         this.clientRecord = clientRecord;
         this.fee = fee;
     }
 
-    public SendPackage newInstance(LocalDate procDate, ClientRecord clientRecord, Integer fee) {
-        return new SendPackage(procDate, clientRecord, fee);
+    public static SendPackage newInstance(LocalDateTime procDateTime, ClientRecord clientRecord, Integer fee) {
+        return new SendPackage(procDateTime, clientRecord, fee);
     }
 
     public ClientRecord getClientRecord() {
