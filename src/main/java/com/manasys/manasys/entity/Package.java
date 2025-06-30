@@ -1,6 +1,6 @@
 package com.manasys.manasys.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
@@ -23,18 +23,18 @@ public abstract class Package {
     private Long pid;
 
     @Column(name = "proc_date", nullable = false)
-    private LocalDate procDate;
+    private LocalDateTime procDateTime;
 
     protected Package() {
     }
 
     @PersistenceCreator
-    protected Package(LocalDate procDate) {
-        this.procDate = procDate;
+    protected Package(LocalDateTime procDateTime) {
+        this.procDateTime = procDateTime;
     }
 
-    public LocalDate getDate() {
-        return procDate;
+    public LocalDateTime getDateTime() {
+        return procDateTime;
     }
 
 }
