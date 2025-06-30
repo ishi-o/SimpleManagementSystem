@@ -18,7 +18,7 @@ public interface CommonRecordService {
      *
      * @param map 配置表
      */
-    void register(Map<String, Object> map);
+    void registerEntity(Map<String, Object> map);
 
     /**
      * 登记访问记录
@@ -28,11 +28,19 @@ public interface CommonRecordService {
     void record(Long id);
 
     /**
+     * 查询是否登记了某个主体的信息
+     *
+     * @param id 标识主体的主键
+     * @return true 若包含; false 若不包含
+     */
+    boolean containsEntity(Long id);
+
+    /**
      * 获取所有主体的信息
      *
      * @return 格式化的信息
      */
-    String getInfo();
+    String getEntityInfo();
 
     /**
      * 获取特定主体的信息
@@ -40,7 +48,7 @@ public interface CommonRecordService {
      * @param id 标识主体的主键
      * @return 格式化的信息
      */
-    String getInfo(Long id);
+    String getEntityInfo(Long id);
 
     /**
      * 获取主体访问记录的信息

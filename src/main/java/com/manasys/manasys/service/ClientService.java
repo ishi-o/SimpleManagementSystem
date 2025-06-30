@@ -2,6 +2,7 @@ package com.manasys.manasys.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import jakarta.transaction.Transactional;
  * @since 2025.6.28
  */
 @Service
-public class ClientService {
+public class ClientService implements CommonRecordService {
 
     private final ClientRepository clientRepo;
     private final ClientRecordRepository cliRecordRepo;
@@ -34,14 +35,16 @@ public class ClientService {
     /**
      * 事务: 登记一个新客户
      *
-     * @param cid 客户身份证号
-     * @param cname 客户姓名
-     * @param phone 客户手机号码
-     * @param loc 客户收件地址
+     * @param map 配置信息表
      * @throws ClientAlreadyExistException 当客户已经存在时
      */
+    @Override
     @Transactional
-    public void register(Long cid, String cname, String phone, String loc) {
+    public void registerEntity(Map<String, Object> map) {
+        Long cid = (Long) map.get("id");
+        String cname = (String) map.get("name"),
+                phone = (String) map.get("phone"),
+                loc = (String) map.get("location");
         if (!clientRepo.existsById(cid)) {
             clientRepo.save(Client.newInstance(cid, cname, phone, loc));
         } else {
@@ -54,8 +57,9 @@ public class ClientService {
      *
      * @param cid 客户的身份证号
      */
+    @Override
     @Transactional
-    public void visit(Long cid) {
+    public void record(Long cid) {
         cliRecordRepo.save(ClientRecord.newInstance(clientRepo.findById(cid).get(), LocalDateTime.now()));
     }
 
@@ -65,40 +69,10 @@ public class ClientService {
      * @param cid 客户身份证号
      * @return true 若存在; false 若不存在
      */
+    @Override
     @Transactional
-    public boolean contains(Long cid) {
+    public boolean containsEntity(Long cid) {
         return clientRepo.existsById(cid);
-    }
-
-    /**
-     * 事务: 查询所有客户的来访次数
-     *
-     * @return 所有客户来访次数列表, 以客户身份证号升序排序
-     */
-    @Transactional
-    public String getCountOfVisit() {
-        List<Object[]> list = cliRecordRepo.countVisitAll();
-        String ans = "客户身份证号\t\t客户来访次数";
-        for (Object[] tup : list) {
-            ans += "\r\n" + tup[0] + "\t\t\t" + tup[1];
-        }
-        return ans;
-    }
-
-    /**
-     * 事务: 查询指定客户的来访次数
-     *
-     * @param cid 客户身份证号
-     * @return 身份证号为 {@code cid} 的客户的来访次数记录
-     * @throws ClientNotFoundException 当客户不存在时
-     */
-    @Transactional
-    public String getCountOfVisit(Long cid) {
-        if (clientRepo.existsById(cid)) {
-            return "身份证号为 \"" + cid + "\" 的客户总共来访 " + cliRecordRepo.countVisitByClientId(cid) + " 次!";
-        } else {
-            throw new ClientNotFoundException();
-        }
     }
 
     /**
@@ -106,8 +80,9 @@ public class ClientService {
      *
      * @return 客户信息列表
      */
+    @Override
     @Transactional
-    public String getClientInfo() {
+    public String getEntityInfo() {
         List<Client> list = clientRepo.findAll();
         String ans = "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址";
         for (Client c : list) {
@@ -123,22 +98,89 @@ public class ClientService {
      * @return 身份证号为 {@code cid} 的客户的个人信息
      * @throws ClientNotFoundException 当客户不存在时
      */
+    @Override
     @Transactional
-    public String getClientInfo(Long cid) {
+    public String getEntityInfo(Long cid) {
         Client c = clientRepo.findById(cid).orElseThrow(() -> {
             throw new ClientNotFoundException();
         });
         return "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址\r\n" + c.getCid() + "\t\t\t" + c.getClientName() + "\t\t" + c.getPhoneNumber() + "\t\t\t" + c.getLocation();
     }
 
+    @Override
     @Transactional
-    public String getClientVisitInfo() {
+    public String getRecordInfo() {
         String ans = "客户来访编号\t\t客户身份证号\t\t客户来访时间";
         List<ClientRecord> list = cliRecordRepo.findAll();
         for (ClientRecord cr : list) {
             ans += "\r\n" + cr.getCrid() + "\t\t\t" + cr.getClient().getCid() + "\t\t\t" + cr.getDateTime();
         }
         return ans;
+    }
+
+    @Override
+    @Transactional
+    public String getRecordInfo(Long cid) {
+        String ans = "客户来访编号\t\t客户来访时间";
+        List<Object[]> list = cliRecordRepo.findByCid(cid);
+        for (Object[] oarr : list) {
+            ans += "\r\n" + oarr[0] + "\t\t\t" + oarr[1];
+        }
+        return ans;
+    }
+
+    @Override
+    @Transactional
+    public String getRecordInfo(Long cid, Integer year, Integer month) {
+        String ans = "客户来访编号\t\t客户来访时间";
+        List<Object[]> list = cliRecordRepo.findByCidAndYearAndMonth(cid, year, month);
+        for (Object[] oarr : list) {
+            ans += "\r\n" + oarr[0] + "\t\t\t" + oarr[1];
+        }
+        return ans;
+    }
+
+    /**
+     * 事务: 查询所有客户的来访次数
+     *
+     * @return 所有客户来访次数列表, 以客户身份证号升序排序
+     */
+    @Override
+    @Transactional
+    public String getRecordCount() {
+        List<Object[]> list = cliRecordRepo.countRecordGroupByCid();
+        String ans = "客户身份证号\t\t客户来访次数";
+        for (Object[] tup : list) {
+            ans += "\r\n" + tup[0] + "\t\t\t" + tup[1];
+        }
+        return ans;
+    }
+
+    /**
+     * 事务: 查询指定客户的来访次数
+     *
+     * @param cid 客户身份证号
+     * @return 身份证号为 {@code cid} 的客户的来访次数记录
+     * @throws ClientNotFoundException 当客户不存在时
+     */
+    @Override
+    @Transactional
+    public String getRecordCount(Long cid) {
+        if (clientRepo.existsById(cid)) {
+            return "身份证号为 \"" + cid + "\" 的客户总共来访 " + cliRecordRepo.countRecordByCid(cid) + " 次!";
+        } else {
+            throw new ClientNotFoundException();
+        }
+    }
+
+    @Override
+    @Transactional
+    public String getRecordCount(Long cid, Integer year, Integer month) {
+        if (clientRepo.existsById(cid)) {
+            return "身份证号为 \"" + cid + "\" 的客户于 " + year + " 年 " + month + " 月 " + " 总共来访 " + cliRecordRepo.countRecordByCidAndYearAndMonth(cid, year, month) + " 次!";
+        } else {
+            throw new ClientNotFoundException();
+        }
     }
 
 }
