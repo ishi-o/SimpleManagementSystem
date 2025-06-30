@@ -24,7 +24,7 @@ import jakarta.persistence.Table;
 public class EmpRecord {
 
     @Embeddable
-    public static class EmpRecordPK implements Serializable {
+    public static class EmpRecordPK implements Serializable, Comparable<EmpRecordPK> {
 
         @ManyToOne
         @JoinColumn(name = "eid", referencedColumnName = "eid")
@@ -48,6 +48,15 @@ public class EmpRecord {
                 return employee.equals(pk.employee) && checkDate.equals(pk.checkDate);
             } else {
                 return false;
+            }
+        }
+
+        @Override
+        public int compareTo(EmpRecordPK o) {
+            if (employee.getEid() == o.getEmployee().getEid()) {
+                return checkDate.compareTo(o.checkDate);
+            } else {
+                return employee.getEid().compareTo(o.employee.getEid());
             }
         }
 

@@ -1,5 +1,6 @@
 package com.manasys.manasys.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,24 @@ import com.manasys.manasys.entity.EmpRecord;
  */
 @Repository
 public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.EmpRecordPK> {
+
+    @Query(value = """
+            SELECT check_date
+            FROM jhomework.emp_records
+            WHERE eid = ?1
+            ORDER BY check_date
+            """, nativeQuery = true)
+    List<LocalDate> findByEid(Long eid);
+
+    @Query(value = """
+            SELECT check_date
+            FROM jhomework.emp_records
+            WHERE eid = ?1 AND
+                EXTRACT(YEAR FROM check_date) = ?2 AND
+                EXTRACT(MONTH FROM check_date) = ?3
+            ORDER BY check_date
+            """, nativeQuery = true)
+    List<LocalDate> findByEidAndYearAndMonth(Long eid, Integer year, Integer month);
 
     /**
      * 统计指定员工在指定年份指定月份的打卡次数
@@ -34,6 +53,38 @@ public interface EmpRecordRepository extends JpaRepository<EmpRecord, EmpRecord.
                 EXTRACT(MONTH FROM er.check_date) = ?3
             """, nativeQuery = true)
     Long countByYearAndMonth(Long eid, Integer year, Integer month);
+
+    @Query(value = """
+            WITH emp_list AS (
+                SELECT eid, joindate
+                FROM jhomework.employees
+            ),
+            month_ranges AS (
+                SELECT 
+                    e.eid,
+                    EXTRACT(YEAR FROM month_date)::INT AS year,
+                    EXTRACT(MONTH FROM month_date)::INT AS month
+                FROM emp_list e
+                CROSS JOIN GENERATE_SERIES(
+                    DATE_TRUNC('month', e.joindate),
+                    DATE_TRUNC('month', CURRENT_DATE),
+                    INTERVAL '1 month'
+                ) AS month_date
+            )
+            SELECT 
+                mr.eid,
+                mr.year,
+                mr.month,
+                COUNT(er.eid) AS cnt
+            FROM month_ranges mr
+            LEFT JOIN jhomework.emp_records er ON
+                er.eid = mr.eid AND
+                EXTRACT(YEAR FROM er.check_date) = mr.year AND
+                EXTRACT(MONTH FROM er.check_date) = mr.month
+            GROUP BY mr.eid, mr.year, mr.month
+            ORDER BY mr.eid, mr.year, mr.month
+            """, nativeQuery = true)
+    List<Object[]> countFromJoinDate();
 
     /**
      * 统计指定员工入职以来所有月份的打卡次数
