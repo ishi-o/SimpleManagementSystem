@@ -12,6 +12,8 @@ import com.manasys.manasys.service.InterfaceService;
 import com.manasys.manasys.service.InterfaceService.InterfaceMode;
 
 /**
+ * 客户命令类
+ *
  * @author 刘洛松
  * @since 2025.6.28
  */

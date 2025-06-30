@@ -5,6 +5,7 @@ package com.manasys.manasys.exception.client;
  *
  * @author 刘洛松
  * @since 2025.6.29
+ * @see ClientException
  */
 public class ClientNotFoundException extends ClientException {
 

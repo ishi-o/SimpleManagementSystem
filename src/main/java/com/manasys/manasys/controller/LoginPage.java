@@ -66,6 +66,9 @@ public class LoginPage implements Quit.Command {
         }
     }
 
+    /**
+     * 命令: 退出程序
+     */
     @ShellMethod(key = {"exit", "quit", "q"}, value = "退出程序")
     public void quit() {
         try {

@@ -1,8 +1,11 @@
 package com.manasys.manasys.exception.userstate;
 
 /**
- * @author Ishi_O
- * @since
+ * 用户未登录时, 抛出该异常
+ *
+ * @author 刘洛松
+ * @since 2025.6.29
+ * @see UserStateException
  */
 public class UserNotLoggedInException extends UserStateException {
 

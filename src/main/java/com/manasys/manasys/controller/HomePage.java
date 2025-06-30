@@ -23,6 +23,11 @@ public class HomePage {
     @Autowired
     private InterfaceService interfaceServ;
 
+    /**
+     * 命令: 管理员登出
+     *
+     * @return 命令执行成功或失败的提示
+     */
     @ShellMethod(key = "sign-out", value = "登出用户")
     public String signOut() {
         try {
@@ -35,6 +40,11 @@ public class HomePage {
         }
     }
 
+    /**
+     * 命令: 管理员账号注销
+     *
+     * @return 命令执行成功或失败的提示
+     */
     @ShellMethod(key = "log-out", value = "注销本用户")
     public String logOut() {
         try {
