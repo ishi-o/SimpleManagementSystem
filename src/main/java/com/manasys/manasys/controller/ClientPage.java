@@ -44,9 +44,12 @@ public class ClientPage {
      * @return 执行成功或失败的消息
      */
     @ShellMethod(key = "reg-client", value = "登记新客户")
-    public String registerClient(Long cid, String cname, String phone, String loc) {
+    public String registerClient(@ShellOption(help = "客户身份证号", defaultValue = "") Long cid, @ShellOption(help = "客户姓名", defaultValue = "") String cname, @ShellOption(help = "客户电话号码", defaultValue = "") String phone, @ShellOption(help = "客户收件地址", defaultValue = "") String loc) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
+            if (cid == null || cname == null || phone == null || loc == null) {
+                return "请提供足够的信息! (reg-client cid cname phone location)";
+            }
             Map<String, Object> map = new HashMap<>();
             map.put("id", cid);
             map.put("name", cname);
@@ -66,10 +69,12 @@ public class ClientPage {
      * @return 执行成功或失败的消息
      */
     @ShellMethod(key = "visit", value = "记录客户来访")
-    public String visit(Long cid) {
+    public String visit(@ShellOption(help = "客户身份证号", defaultValue = "") Long cid) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            if (!services.get("clientService").containsEntity(cid)) {
+            if (cid == null) {
+                return "请提供客户的身份证号! (visit cid)";
+            } else if (!services.get("clientService").containsEntity(cid)) {
                 String cname = sin.readLine("客户首次来访, 需要登记信息: \r\n请输入客户姓名: ");
                 String phonenum = sin.readLine("请输入客户电话号码: ");
                 String loc = sin.readLine("请输入客户收件地址: ");
