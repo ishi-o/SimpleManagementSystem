@@ -12,6 +12,33 @@ import java.util.logging.Logger;
 
 /**
  * 日志工具类，支持动态配置日志输出位置、名称、标题和详细信息
+ * Logs 工具类
+ * 日志分类：系统日志和错误日志分开存储
+ * 日志格式：包含时间戳、日志级别、日志名称和消息
+ * 日志文件：自动创建logs目录，日志文件自动滚动
+ * 日志级别：可以动态设置日志级别
+ * 扩展性：可以动态添加新的日志处理器
+ * 使用示例
+ * public class Main {
+ *      public static void main(String[] args) {
+ *          // 1. 动态设置日志目录
+ *          Logs.setLogDirectory("my_logs");
+ *          // 2. 添加一个自定义日志处理器（例如审计日志）
+ *          try {
+ *              Logs.addFileHandler("AuditLog", "my_logs/audit.log", "AUDIT LOG");
+ *          } catch (IOException e) {
+ *              e.printStackTrace();
+ *          }
+ *          // 3. 记录日志
+ *          Logs.info("系统启动完成");  // 输出到 my_logs/system.log
+ *          Logs.error("数据库连接失败", new RuntimeException("Connection timeout"));
+ *          // 4. 动态调整日志级别
+ *          Logs.setLogLevel(Level.FINE);  // 启用DEBUG级别日志
+ *      }
+ *  }
+ * 
+ * @author 赵庆显
+ * @since 2025.7.2
  */
 public final class Logs {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
@@ -127,30 +154,3 @@ public final class Logs {
     }
 }
 
-// Logs 工具类
-// 日志分类：系统日志和错误日志分开存储
-// 日志格式：包含时间戳、日志级别、日志名称和消息
-// 日志文件：自动创建logs目录，日志文件自动滚动
-// 日志级别：可以动态设置日志级别
-// 扩展性：可以动态添加新的日志处理器
-// 使用示例
-// public class Main {
-//     public static void main(String[] args) {
-//         // 1. 动态设置日志目录
-//         Logs.setLogDirectory("my_logs");
-
-//         // 2. 添加一个自定义日志处理器（例如审计日志）
-//         try {
-//             Logs.addFileHandler("AuditLog", "my_logs/audit.log", "AUDIT LOG");
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-
-//         // 3. 记录日志
-//         Logs.info("系统启动完成");  // 输出到 my_logs/system.log
-//         Logs.error("数据库连接失败", new RuntimeException("Connection timeout"));
-
-//         // 4. 动态调整日志级别
-//         Logs.setLogLevel(Level.FINE);  // 启用DEBUG级别日志
-//     }
-// }
