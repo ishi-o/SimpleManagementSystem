@@ -36,9 +36,9 @@ public class HomePage {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             userServ.signOut();
             interfaceServ.setCurrMode(InterfaceMode.LOGIN);
-            return "登出成功!";
+            return "OK: 登出成功!";
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -53,9 +53,9 @@ public class HomePage {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             userServ.logOut();
             interfaceServ.setCurrMode(InterfaceMode.LOGIN);
-            return "注销成功! 请重新登录!";
+            return "OK: 注销成功! 请重新登录!";
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
