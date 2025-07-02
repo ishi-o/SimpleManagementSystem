@@ -47,8 +47,8 @@ public class ClientPage {
     public String registerClient(@ShellOption(help = "客户身份证号", defaultValue = "") Long cid, @ShellOption(help = "客户姓名", defaultValue = "") String cname, @ShellOption(help = "客户电话号码", defaultValue = "") String phone, @ShellOption(help = "客户收件地址", defaultValue = "") String loc) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            if (cid == null || cname == null || phone == null || loc == null) {
-                return "请提供足够的信息! (reg-client cid cname phone location)";
+            if (cid == null || cname.isEmpty() || phone.isEmpty() || loc.isEmpty()) {
+                return "ERROR: 请提供足够的信息!\r\n       例如: reg-client 1 Mary 15535 \"New York\" 或\r\n       reg-client --cid 1 --cname Mary --phone 15535 --loc \"New York\"";
             }
             Map<String, Object> map = new HashMap<>();
             map.put("id", cid);
@@ -56,9 +56,9 @@ public class ClientPage {
             map.put("phone", phone);
             map.put("location", loc);
             services.get("clientService").registerEntity(map);
-            return "登记成功!";
+            return "OK: 登记成功!";
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -73,23 +73,23 @@ public class ClientPage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (cid == null) {
-                return "请提供客户的身份证号! (visit cid)";
+                return "ERROR: 请提供客户的身份证号!\r\n       例如: visit 1 或 visit --cid 1";
             } else if (!services.get("clientService").containsEntity(cid)) {
-                String cname = sin.readLine("客户首次来访, 需要登记信息: \r\n请输入客户姓名: ");
-                String phonenum = sin.readLine("请输入客户电话号码: ");
-                String loc = sin.readLine("请输入客户收件地址: ");
+                String cname = sin.readLine("WARNING: 客户首次来访, 需要登记信息: \r\n          请输入客户姓名: ");
+                String phonenum = sin.readLine("          请输入客户电话号码: ");
+                String loc = sin.readLine("          请输入客户收件地址: ");
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", cid);
                 map.put("name", cname);
                 map.put("phone", phonenum);
                 map.put("location", loc);
                 services.get("clientService").registerEntity(map);
-                System.out.println("登记成功!");
+                System.out.println("OK: 登记成功!");
             }
             services.get("clientService").record(cid);
-            return "记录客户来访成功!";
+            return "OK: 记录客户来访成功!";
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -109,7 +109,7 @@ public class ClientPage {
                 return services.get("clientService").getRecordCount(cid);
             }
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -129,16 +129,17 @@ public class ClientPage {
                 return services.get("clientService").getEntityInfo(cid);
             }
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
     @ShellMethod(key = "get-visit-info", value = "获取所有客户的来访记录")
     public String getClientVisitInfo() {
         try {
+            interfaceServ.checkCurrMode(InterfaceMode.HOME);
             return services.get("clientService").getRecordInfo();
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 

@@ -39,15 +39,15 @@ public class EmployeePage {
     public String registerEmployee(@ShellOption(help = "员工姓名", defaultValue = "") String ename) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            if (ename == null) {
-                return "请提供员工姓名! (reg-emp ename)";
+            if (ename.isEmpty()) {
+                return "ERROR: 请提供员工姓名!\r\n       例如: reg-emp Mary 或 reg-emp --ename Mary";
             }
             Map<String, Object> map = new HashMap<>();
             map.put("name", ename);
             services.get("employeeService").registerEntity(map);
-            return "登记成功!";
+            return "OK: 登记成功!";
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -60,9 +60,9 @@ public class EmployeePage {
     public String viewAllEmployees() {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
-            return services.get("employeeService").getEntityInfo();
+            return "OK: \r\n" + services.get("employeeService").getEntityInfo();
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -77,12 +77,12 @@ public class EmployeePage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (eid == null) {
-                return "请提供员工编号! (punch-in eid)";
+                return "ERROR: 请提供员工编号!\r\n       例如: punch-in 1 或 punch-in --eid 1";
             }
             services.get("employeeService").record(eid);
-            return "打卡成功!";
+            return "OK: 打卡成功!";
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -99,16 +99,16 @@ public class EmployeePage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (eid == null) {
-                return "请提供员工编号! (get-punch eid [year] [month])";
+                return "ERROR: 必须提供员工编号!\r\n       例如: get-punch 1 [2025 6]";
             } else if (year == null && month == null) {
-                return services.get("employeeService").getRecordCount(eid);
+                return "OK: " + services.get("employeeService").getRecordCount(eid);
             } else if (year != null && month != null) {
-                return services.get("employeeService").getRecordCount(eid, year, month);
+                return "OK: " + services.get("employeeService").getRecordCount(eid, year, month);
             } else {
-                return "没有这样的命令!";
+                return "ERROR: 没有这样的命令! 年份与月份可选但必须同时提供!\r\n       例如: get-punch --eid 1 --year 2025 --month 6";
             }
         } catch (Exception e) {
-            return e.getMessage();
+            return "ERROR: " + e.getMessage();
         }
     }
 }
