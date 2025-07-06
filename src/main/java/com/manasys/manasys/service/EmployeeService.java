@@ -3,6 +3,7 @@ package com.manasys.manasys.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,12 @@ public class EmployeeService implements CommonRecordService {
             empRecordRepo.save(EmpRecord.newInstance(emp, LocalDate.now()));
         }
     }
-
+     /**
+     * 检查员工是否存在
+     *
+     * @param id 员工编号
+     * @return 存在返回true，否则返回false
+     */
     @Override
     @Transactional
     public boolean containsEntity(Long id) {
@@ -79,14 +85,24 @@ public class EmployeeService implements CommonRecordService {
         }
         return ans;
     }
-
+    /**
+     * 获取指定员工信息
+     *
+     * @param eid 员工编号
+     * @return 格式化后的员工信息字符串
+     * @throws NoSuchElementException 当指定员工不存在时抛出
+     */
     @Override
     @Transactional
     public String getEntityInfo(Long eid) {
         Employee emp = empRepo.findById(eid).orElseThrow();
         return "员工号\t\t员工姓名\t\t入职日期\r\n" + eid + "\t\t" + emp.getEname() + "\t\t" + emp.getJoindate();
     }
-
+    /**
+     * 获取所有打卡记录
+     *
+     * @return 格式化后的打卡记录字符串
+     */
     @Override
     @Transactional
     public String getRecordInfo() {
@@ -97,7 +113,12 @@ public class EmployeeService implements CommonRecordService {
         }
         return ans;
     }
-
+    /**
+     * 获取指定员工的所有打卡记录
+     *
+     * @param eid 员工编号
+     * @return 格式化后的打卡记录字符串
+     */
     @Override
     @Transactional
     public String getRecordInfo(Long eid) {
@@ -108,7 +129,14 @@ public class EmployeeService implements CommonRecordService {
         }
         return ans;
     }
-
+     /**
+     * 获取指定员工在特定年月的打卡记录
+     *
+     * @param eid 员工编号
+     * @param year 年份
+     * @param month 月份
+     * @return 格式化后的打卡记录字符串
+     */
     @Override
     @Transactional
     public String getRecordInfo(Long eid, Integer year, Integer month) {
@@ -119,7 +147,11 @@ public class EmployeeService implements CommonRecordService {
         }
         return ans;
     }
-
+    /**
+     * 获取所有员工的打卡统计
+     *
+     * @return 格式化后的打卡统计字符串
+     */
     @Override
     @Transactional
     public String getRecordCount() {

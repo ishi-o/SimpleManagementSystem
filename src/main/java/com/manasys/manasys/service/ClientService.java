@@ -106,7 +106,11 @@ public class ClientService implements CommonRecordService {
         });
         return "客户身份证号\t\t客户名\t\t客户电话号码\t\t客户收件地址\r\n" + c.getCid() + "\t\t\t" + c.getClientName() + "\t\t" + c.getPhoneNumber() + "\t\t\t" + c.getLocation();
     }
-
+    /**
+     * 事务: 获取所有客户来访记录信息
+     *
+     * @return 格式化后的来访记录字符串，包含来访编号、客户身份证号和来访时间
+     */
     @Override
     @Transactional
     public String getRecordInfo() {
@@ -117,7 +121,13 @@ public class ClientService implements CommonRecordService {
         }
         return ans;
     }
-
+    /**
+     * 事务: 获取指定客户的所有来访记录
+     *
+     * @param cid 客户身份证号
+     * @return 格式化后的来访记录字符串，包含来访编号和来访时间
+     * @throws ClientNotFoundException 当客户不存在时
+     */
     @Override
     @Transactional
     public String getRecordInfo(Long cid) {
@@ -128,7 +138,15 @@ public class ClientService implements CommonRecordService {
         }
         return ans;
     }
-
+     /**
+     * 事务: 获取指定客户在特定年月内的来访记录
+     *
+     * @param cid 客户身份证号
+     * @param year 查询年份
+     * @param month 查询月份
+     * @return 格式化后的来访记录字符串，包含来访编号和来访时间
+     * @throws ClientNotFoundException 当客户不存在时
+     */
     @Override
     @Transactional
     public String getRecordInfo(Long cid, Integer year, Integer month) {
@@ -172,7 +190,15 @@ public class ClientService implements CommonRecordService {
             throw new ClientNotFoundException();
         }
     }
-
+    /**
+     * 获取指定客户在特定年月内的来访次数统计
+     * 
+     * @param cid 客户身份证号，唯一标识客户
+     * @param year 要统计的年份
+     * @param month 要统计的月份(1-12)
+     * @return 格式化后的统计结果字符串
+     * @throws ClientNotFoundException 当指定客户不存在时抛出
+     */
     @Override
     @Transactional
     public String getRecordCount(Long cid, Integer year, Integer month) {

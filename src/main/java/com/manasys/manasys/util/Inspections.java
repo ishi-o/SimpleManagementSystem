@@ -8,68 +8,14 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 字段验证工具类（支持动态验证方法注册）
+ * 数据验证工具类，提供常用字段验证功能
  * 
- * 功能：
- * 1. 内置常用字段验证方法
- * 2. 支持动态注册新的验证规则
- * 3. 通过统一接口调用验证方法
- * 
- * @author 赵庆显
- * @since 2025.7.2
- */
-
-/**
- * 动态验证方式
- * // 使用统一验证接口
- * boolean isValid = Inspections.validate("username", "user123");
- * 
- * 注册新验证规则
- * // 注册邮箱验证规则
- * Inspections.registerValidator("email", email -> 
- * email != null && email.matches("^[\\w.-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,}$"));
- * 
- * // 使用新注册的验证规则
- * boolean isEmailValid = Inspections.validate("email", "test@example.com");
- * 
- * 覆盖现有验证规则
- * // 覆盖现有的用户名验证规则（要求首字母必须大写）
- * Inspections.registerValidator("username", username -> username != null && username.matches("^[A-Z][a-zA-Z0-9_]{0,19}$"));
- * 
- * // 使用新规则验证
- * boolean isValid = Inspections.validate("username", "User123");  // 现在要求首字母大写
- * 
- * 完整使用示例和测试
- * public class Main {
- *   public static void main(String[] args) {
- *       // 动态注册员工号验证方法（仅检查 6 位数字）
- *       Inspections.registerValidator("employeeNumber", input -> {
- *           if (input == null || input.length() != 6) {
- *               return false;
- *           }
- *           try {
- *               // 尝试转换为数字，确保全部是数字
- *               Integer.parseInt(input);
- *               return true;
- *           } catch (NumberFormatException e) {
- *               return false;
- *           }
- *       });
- * 
- *       // 使用验证方法
- *       boolean isValid = Inspections.validate("employeeNumber", "123456");
- *       System.out.println("员工号是否有效: " + isValid); // 输出: 员工号是否有效: true
- * 
- *       // 测试无效员工号（非数字或长度不对）
- *       isValid = Inspections.validate("employeeNumber", "12a456");
- *       System.out.println("员工号是否有效: " + isValid); // 输出: 员工号是否有效: false
+ * <p>该类包含用户名、密码、电话号码、日期格式等多种验证方法，
+ * 支持通过注册机制扩展自定义验证规则</p>
  *
- *       isValid = Inspections.validate("employeeNumber", "12345");
- *       System.out.println("员工号是否有效: " + isValid); // 输出: 员工号是否有效: false
- *   }
- * }
+ * @author 刘洛松
+ * @since 2025.6.30
  */
-
 
 public final class Inspections {
     // 验证方法注册表
@@ -92,12 +38,11 @@ public final class Inspections {
         registerValidator("time",Inspections::validateTime);
     }
 
-    // 公开API
-
-    /**
-     * 注册新的验证方法
-     * @param fieldName 字段名称（如"email"）
-     * @param validator 验证方法（接受字符串参数，返回布尔值）
+     /**
+     * 注册自定义验证方法
+     * @param fieldName 字段名称（不区分大小写）
+     * @param validator 验证逻辑函数（输入字符串，返回布尔值）
+     * @throws IllegalArgumentException 当参数为null时抛出
      */
     public static void registerValidator(String fieldName,Function<String,Boolean> validator){
         if(fieldName == null || validator == null){
@@ -108,10 +53,10 @@ public final class Inspections {
 
     /**
      * 执行字段验证
-     * @param fieldName 字段名称（如"username"）
-     * @param value 待验证的值
-     * @return 验证结果
-     * @throws IllegalArgumentException 如果字段名称未注册
+     * @param fieldName 已注册的字段名
+     * @param value 待验证字符串
+     * @return 验证通过返回true，否则false
+     * @throws IllegalArgumentException 当字段未注册时抛出
      */
     public static boolean validate(String fieldName,String value){
         Function<String,Boolean> validator = validationMap.get(fieldName.toLowerCase());
@@ -121,17 +66,19 @@ public final class Inspections {
         return validator.apply(value);
     }
 
-    // 内置验证方法
-
     /**
-     * 验证用户名（1-20位字母、数字或下划线）
+     * 用户名格式验证（1-20位字母数字下划线）
+     * @param username 待验证字符串
+     * @return 符合格式返回true
      */
     private static boolean validateUsername(String username){
         return username != null && username.matches("^[a-zA-Z0-9_]{1,20}$");
     }
 
     /**
-     * 验证密码（8-20位，至少包含大小写字母、数字和特殊字符）
+     * 密码强度验证（8-20位，需包含大小写字母、数字和特殊字符）
+     * @param password 待验证字符串
+     * @return 符合强度要求返回true
      */
     private static boolean validatePassword(String password) {
         return password != null && 
@@ -139,14 +86,18 @@ public final class Inspections {
     }
     
     /**
-     * 验证电话号码（11位数字）
+     * 手机号格式验证（11位纯数字）
+     * @param phone 待验证字符串
+     * @return 符合格式返回true
      */
     private static boolean validatePhone(String phone) {
         return phone != null && phone.matches("^\\d{11}$");
     }
     
     /**
-     * 验证日期格式（YYYY-MM-DD）
+     * 日期格式验证（ISO格式：yyyy-MM-dd）
+     * @param date 待验证字符串
+     * @return 格式正确返回true
      */
     private static boolean validateDateFormat(String date) {
         if (date == null || !date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
@@ -162,7 +113,9 @@ public final class Inspections {
     }
     
     /**
-     * 验证日期是否在2000年后今天之前
+     * 日期范围验证（2000年至今）
+     * @param date 待验证字符串
+     * @return 在有效范围内返回true
      */
     private static boolean validateDateRange(String date) {
         if (!validateDateFormat(date)) {
@@ -177,7 +130,9 @@ public final class Inspections {
     }
     
     /**
-     * 验证时间格式(HH:mm:ss)
+     * 时间格式验证（HH:mm:ss）
+     * @param time 待验证字符串
+     * @return 格式正确返回true
      */
     private static boolean validateTime(String time) {
         if (time == null || !time.matches("^\\d{2}:\\d{2}:\\d{2}$")) {
