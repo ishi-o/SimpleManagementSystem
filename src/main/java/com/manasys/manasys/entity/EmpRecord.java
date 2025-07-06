@@ -51,9 +51,17 @@ public class EmpRecord {
             }
         }
 
+        /**
+         * 返回该类的哈希值
+         */
+        @Override
+        public int hashCode() {
+            return employee.hashCode() + checkDate.hashCode();
+        }
+
         @Override
         public int compareTo(EmpRecordPK o) {
-            if (employee.getEid() == o.getEmployee().getEid()) {
+            if (employee.getEid().equals(o.getEmployee().getEid())) {
                 return checkDate.compareTo(o.checkDate);
             } else {
                 return employee.getEid().compareTo(o.employee.getEid());
@@ -78,6 +86,16 @@ public class EmpRecord {
     @PersistenceCreator
     protected EmpRecord(Employee emp, LocalDate checkDate) {
         this.emprecord = new EmpRecordPK(emp, checkDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return emprecord.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EmpRecord.class == obj.getClass() && emprecord.equals(((EmpRecord) obj).emprecord);
     }
 
     public static EmpRecord newInstance(Employee emp, LocalDate checkDate) {

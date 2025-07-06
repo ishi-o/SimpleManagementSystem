@@ -44,6 +44,21 @@ public class Client {
         return new Client(cid, cname, phonenum, loc);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() == Client.class) {
+            Client c = (Client) obj;
+            return cid.equals(c.cid);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return cid.hashCode();
+    }
+
     public Long getCid() {
         return cid;
     }

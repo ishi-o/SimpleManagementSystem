@@ -46,6 +46,21 @@ public class ClientRecord {
         return new ClientRecord(client, visitDateTime);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() == Client.class) {
+            ClientRecord cr = (ClientRecord) obj;
+            return crid.equals(cr.crid);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return crid.hashCode();
+    }
+
     public Long getCrid() {
         return crid;
     }

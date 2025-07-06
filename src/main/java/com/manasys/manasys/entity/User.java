@@ -68,7 +68,7 @@ public class User {
     public boolean equals(Object o) {
         if (o.getClass() == User.class) {
             User u = (User) o;
-            return username.equals(u.username);
+            return uid.equals(u.uid);
         } else {
             return false;
         }
@@ -76,7 +76,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return username.hashCode();
+        return uid.hashCode();
     }
 
     /**

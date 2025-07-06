@@ -11,36 +11,21 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * 日志工具类，支持动态配置日志输出位置、名称、标题和详细信息
- * Logs 工具类
- * 日志分类：系统日志和错误日志分开存储
- * 日志格式：包含时间戳、日志级别、日志名称和消息
- * 日志文件：自动创建logs目录，日志文件自动滚动
- * 日志级别：可以动态设置日志级别
- * 扩展性：可以动态添加新的日志处理器
- * 使用示例
- * public class Main {
- *      public static void main(String[] args) {
- *          // 1. 动态设置日志目录
- *          Logs.setLogDirectory("my_logs");
- *          // 2. 添加一个自定义日志处理器（例如审计日志）
- *          try {
- *              Logs.addFileHandler("AuditLog", "my_logs/audit.log", "AUDIT LOG");
- *          } catch (IOException e) {
- *              e.printStackTrace();
- *          }
- *          // 3. 记录日志
- *          Logs.info("系统启动完成");  // 输出到 my_logs/system.log
- *          Logs.error("数据库连接失败", new RuntimeException("Connection timeout"));
- *          // 4. 动态调整日志级别
- *          Logs.setLogLevel(Level.FINE);  // 启用DEBUG级别日志
- *      }
- *  }
- * 
+ * 日志工具类，支持动态配置日志输出位置、名称、标题和详细信息 Logs 工具类 日志分类：系统日志和错误日志分开存储
+ * 日志格式：包含时间戳、日志级别、日志名称和消息 日志文件：自动创建logs目录，日志文件自动滚动 日志级别：可以动态设置日志级别
+ * 扩展性：可以动态添加新的日志处理器 使用示例 public class Main { public static void main(String[]
+ * args) { // 1. 动态设置日志目录 Logs.setLogDirectory("my_logs"); // 2.
+ * 添加一个自定义日志处理器（例如审计日志） try { Logs.addFileHandler("AuditLog",
+ * "my_logs/audit.log", "AUDIT LOG"); } catch (IOException e) {
+ * e.printStackTrace(); } // 3. 记录日志 Logs.info("系统启动完成"); // 输出到
+ * my_logs/system.log Logs.error("数据库连接失败", new RuntimeException("Connection
+ * timeout")); // 4. 动态调整日志级别 Logs.setLogLevel(Level.FINE); // 启用DEBUG级别日志 } }
+ *
  * @author 赵庆显
  * @since 2025.7.2
  */
 public final class Logs {
+
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     private static Logger systemLogger;
     private static Logger errorLogger;
@@ -50,19 +35,22 @@ public final class Logs {
         initDefaultLoggers();
     }
 
-    private Logs() {}
+    private Logs() {
+    }
 
     // 初始化默认日志记录器（系统日志和错误日志）
     private static void initDefaultLoggers() {
         try {
             // 创建日志目录
             File dir = new File(logDir);
-            if (!dir.exists()) dir.mkdirs();
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
 
             // 系统日志配置
             systemLogger = Logger.getLogger("SystemLog");
             setupFileHandler(systemLogger, logDir + "/system.log", "SYSTEM LOG");
-            
+
             // 错误日志配置
             errorLogger = Logger.getLogger("ErrorLog");
             setupFileHandler(errorLogger, logDir + "/error.log", "ERROR LOG");
@@ -82,6 +70,7 @@ public final class Logs {
 
     // 自定义日志格式（支持动态标题）
     private static class CustomFormatter extends Formatter {
+
         private final String title;
 
         public CustomFormatter(String title) {
@@ -100,7 +89,6 @@ public final class Logs {
     }
 
     // 剩下的是公共API
-
     /**
      * 设置日志输出目录（需在首次调用日志方法前设置）
      */
@@ -111,9 +99,10 @@ public final class Logs {
 
     /**
      * 动态添加一个新的日志处理器（例如输出到另一个文件）
+     *
      * @param loggerName 日志器名称（如"SystemLog"或自定义名称）
-     * @param filePath   日志文件路径（如"logs/custom.log"）
-     * @param title      日志标题
+     * @param filePath 日志文件路径（如"logs/custom.log"）
+     * @param title 日志标题
      */
     public static void addFileHandler(String loggerName, String filePath, String title) throws IOException {
         Logger logger = Logger.getLogger(loggerName);
@@ -122,6 +111,7 @@ public final class Logs {
 
     /**
      * 记录系统信息日志
+     *
      * @param message 日志信息
      */
     public static void info(String message) {
@@ -130,6 +120,7 @@ public final class Logs {
 
     /**
      * 记录警告日志
+     *
      * @param message 日志信息
      */
     public static void warning(String message) {
@@ -138,6 +129,7 @@ public final class Logs {
 
     /**
      * 记录错误日志（带异常堆栈）
+     *
      * @param message 错误信息
      * @param throwable 异常对象
      */
@@ -153,4 +145,3 @@ public final class Logs {
         errorLogger.setLevel(level);
     }
 }
-

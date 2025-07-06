@@ -33,6 +33,16 @@ public abstract class Package {
         this.procDateTime = procDateTime;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Package && pid.equals(((Package) obj).pid);
+    }
+
+    @Override
+    public int hashCode() {
+        return pid.hashCode();
+    }
+
     public LocalDateTime getDateTime() {
         return procDateTime;
     }

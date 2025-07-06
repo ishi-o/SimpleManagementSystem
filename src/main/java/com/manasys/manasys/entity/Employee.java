@@ -44,6 +44,11 @@ public class Employee {
     }
 
     @Override
+    public int hashCode() {
+        return eid.hashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         return Employee.class == o.getClass() && eid.equals(((Employee) o).eid);
     }
