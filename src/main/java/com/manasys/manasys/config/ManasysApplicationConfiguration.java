@@ -35,13 +35,18 @@ public class ManasysApplicationConfiguration {
     }
 
     @EventListener(ApplicationStartedEvent.class)
-    public void onApplicationStarted() {
+    public void onApplicationStarted() throws IOException {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            new ProcessBuilder("cmd.exe", "/c", "chcp", "65001", ">", "nul").inheritIO().start();
+        }
+
         System.setProperty("file.encoding", encodingProperties.getProperty("file"));
         System.setProperty("sun.jnu.encoding", encodingProperties.getProperty("jnu"));
         System.setProperty("org.jline.terminal.encoding", encodingProperties.getProperty("jline"));
         System.setProperty("org.jline.terminal.jna.encoding", encodingProperties.getProperty("jline"));
         System.setOut(new PrintStream(System.out, true, Charset.forName(encodingProperties.getProperty("file"))));
         System.setErr(new PrintStream(System.err, true, Charset.forName(encodingProperties.getProperty("file"))));
+
         System.out.println("*********************************************************\n");
         System.out.println("\t欢迎使用 XXX 公司 前台管理系统 Manasys!");
         System.out.println("\t键入 \"help\" 命令以获取帮助!\n");
