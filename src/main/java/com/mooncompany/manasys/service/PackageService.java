@@ -5,12 +5,12 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
-import com.mooncompany.manasys.entity.ReceivePackage;
 import com.mooncompany.manasys.entity.SendPackage;
 import com.mooncompany.manasys.repository.ClientRecordRepository;
 import com.mooncompany.manasys.repository.EmployeeRepository;
 import com.mooncompany.manasys.repository.ReceivePackageRepository;
 import com.mooncompany.manasys.repository.SendPackageRepository;
+import com.mooncompany.manasys.util.EntityFactory;
 
 import jakarta.transaction.Transactional;
 
@@ -52,7 +52,7 @@ public class PackageService {
      */
     @Transactional
     public void register(Long eid) {
-        rpRepo.save(ReceivePackage.newInstance(LocalDateTime.now(), empRepo.findById(eid).orElseThrow()));
+        rpRepo.save(EntityFactory.newReceivePackage(empRepo.findById(eid).orElseThrow()));
     }
 
     /**

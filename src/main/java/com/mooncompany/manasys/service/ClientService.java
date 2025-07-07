@@ -1,6 +1,5 @@
 package com.mooncompany.manasys.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import com.mooncompany.manasys.exception.client.ClientAlreadyExistException;
 import com.mooncompany.manasys.exception.client.ClientNotFoundException;
 import com.mooncompany.manasys.repository.ClientRecordRepository;
 import com.mooncompany.manasys.repository.ClientRepository;
+import com.mooncompany.manasys.util.EntityFactory;
 
 import jakarta.transaction.Transactional;
 
@@ -47,7 +47,7 @@ public class ClientService implements CommonRecordService {
                 phone = (String) map.get("phone"),
                 loc = (String) map.get("location");
         if (!clientRepo.existsById(cid)) {
-            clientRepo.save(Client.newInstance(cid, cname, phone, loc));
+            clientRepo.save(EntityFactory.newClient(cid, cname, phone, loc));
         } else {
             throw new ClientAlreadyExistException();
         }
@@ -61,7 +61,7 @@ public class ClientService implements CommonRecordService {
     @Override
     @Transactional
     public void record(Long cid) {
-        cliRecordRepo.save(ClientRecord.newInstance(clientRepo.findById(cid).get(), LocalDateTime.now()));
+        cliRecordRepo.save(EntityFactory.newClientRecordAtNow(clientRepo.findById(cid).get()));
     }
 
     /**

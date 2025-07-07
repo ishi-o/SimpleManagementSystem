@@ -13,6 +13,7 @@ import com.mooncompany.manasys.entity.EmpRecord.EmpRecordPK;
 import com.mooncompany.manasys.entity.Employee;
 import com.mooncompany.manasys.repository.EmpRecordRepository;
 import com.mooncompany.manasys.repository.EmployeeRepository;
+import com.mooncompany.manasys.util.EntityFactory;
 
 import jakarta.transaction.Transactional;
 
@@ -43,7 +44,7 @@ public class EmployeeService implements CommonRecordService {
     @Override
     @Transactional
     public void registerEntity(Map<String, Object> map) {
-        empRepo.save(Employee.newInstance((String) map.get("name"), LocalDate.now()));
+        empRepo.save(EntityFactory.newEmployeeAtNow((String) map.get("name")));
     }
 
     /**
@@ -56,7 +57,7 @@ public class EmployeeService implements CommonRecordService {
     public void record(Long eid) {
         Employee emp = empRepo.findById(eid).orElseThrow();
         if (!empRecordRepo.existsById(new EmpRecordPK(emp, LocalDate.now()))) {
-            empRecordRepo.save(EmpRecord.newInstance(emp, LocalDate.now()));
+            empRecordRepo.save(EntityFactory.newEmployeeRecordAtNow(emp));
         }
     }
 

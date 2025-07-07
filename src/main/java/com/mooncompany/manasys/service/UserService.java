@@ -11,6 +11,8 @@ import com.mooncompany.manasys.exception.signup.InvalidUsernameException;
 import com.mooncompany.manasys.exception.signup.UserAlreadyExistsException;
 import com.mooncompany.manasys.exception.userstate.UserAlreadyLoggedInByOthersException;
 import com.mooncompany.manasys.repository.UserRepository;
+import com.mooncompany.manasys.util.EntityFactory;
+import com.mooncompany.manasys.util.Inspections;
 
 import jakarta.transaction.Transactional;
 
@@ -53,12 +55,12 @@ public class UserService {
     public User signUp(String username, String password) {
         if (userRepo.findByUsername(username).isPresent()) {
             throw new UserAlreadyExistsException(username);
-        } else if (!username.matches("^[a-zA-Z0-9]{1,20}$")) {
+        } else if (!Inspections.validate("username", username)) {
             throw new InvalidUsernameException(username);
-        } else if (!password.matches("^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=[^0-9]*[0-9])(?=[^@#$%&+=]*[@#$%&+=])[a-zA-Z0-9@#$%&+=]{8,20}$")) {
+        } else if (!Inspections.validate("password", password)) {
             throw new InvalidPasswordException(password);
         } else {
-            return userRepo.save(User.newInstance(username, password));
+            return userRepo.save(EntityFactory.newUser(username, password));
         }
     }
 
