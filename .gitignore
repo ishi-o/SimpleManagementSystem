@@ -3,6 +3,7 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 logs/
 *.log
+*.tmp
 
 !**/src/main/**/target/
 !**/src/test/**/target/
