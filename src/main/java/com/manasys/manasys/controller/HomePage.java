@@ -1,5 +1,6 @@
 package com.manasys.manasys.controller;
 
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -14,6 +15,7 @@ import com.manasys.manasys.service.UserService;
  * @since 2025.6.28
  */
 @ShellComponent
+@ShellCommandGroup("管理人员操作")
 public class HomePage {
 
     private final UserService userServ;

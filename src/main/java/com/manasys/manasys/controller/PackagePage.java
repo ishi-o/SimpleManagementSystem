@@ -1,5 +1,6 @@
 package com.manasys.manasys.controller;
 
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -14,9 +15,9 @@ import com.manasys.manasys.service.PackageService;
  * @author 刘洛松
  * @author 杨帆
  * @since 2025.6.30
-
  */
 @ShellComponent
+@ShellCommandGroup("快递收发操作")
 public class PackagePage {
 
     private final InterfaceService interfaceServ;
@@ -27,11 +28,11 @@ public class PackagePage {
         this.interfaceServ = interfaceServ;
         this.pkgServ = pkgServ;
     }
-  /**
+
+    /**
      * 登记发送快递命令
      * <p>
-     * 该命令用于在系统中登记发送的快递信息，
-     * 需要关联客户来访记录并指定快递费用。
+     * 该命令用于在系统中登记发送的快递信息， 需要关联客户来访记录并指定快递费用。
      * </p>
      *
      * @param crid 和订单关联的客户来访记录编号，必须提供有效值
@@ -54,11 +55,11 @@ public class PackagePage {
             return "ERROR: " + e.getMessage();
         }
     }
-  /**
+
+    /**
      * 登记接收快递命令
      * <p>
-     * 该命令用于在系统中登记接收的快递信息，
-     * 需要指定接收快递的员工编号。
+     * 该命令用于在系统中登记接收的快递信息， 需要指定接收快递的员工编号。
      * </p>
      *
      * @param eid 接收快递的员工编号，必须提供有效值
@@ -80,11 +81,11 @@ public class PackagePage {
             return "ERROR: " + e.getMessage();
         }
     }
-/**
+
+    /**
      * 统计发件费用命令
      * <p>
-     * 该命令用于统计指定年月内的快递发送费用总和，
-     * 返回格式化的统计结果。
+     * 该命令用于统计指定年月内的快递发送费用总和， 返回格式化的统计结果。
      * </p>
      *
      * @param year 指定的年份（如2025），必须提供有效值

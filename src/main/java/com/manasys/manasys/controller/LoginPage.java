@@ -3,6 +3,7 @@ package com.manasys.manasys.controller;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.shell.ExitRequest;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -19,6 +20,7 @@ import com.manasys.manasys.service.UserService;
  * @since 2025.6.25
  */
 @ShellComponent
+@ShellCommandGroup("登录页面操作")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class LoginPage implements Quit.Command {
 

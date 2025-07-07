@@ -3,6 +3,7 @@ package com.manasys.manasys.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -18,6 +19,7 @@ import com.manasys.manasys.service.InterfaceService.InterfaceMode;
  * @since 2025.6.28
  */
 @ShellComponent
+@ShellCommandGroup("公司员工操作")
 public class EmployeePage {
 
     private final Map<String, CommonRecordService> services;
@@ -36,7 +38,7 @@ public class EmployeePage {
      * @return 命令执行成功或失败的提示
      */
     @ShellMethod(key = "reg-emp", value = "登记新员工")
-    public String registerEmployee(@ShellOption(help = "员工姓名", defaultValue = "") String ename) {
+    public String registerEmployee(@ShellOption(help = "员工姓名", defaultValue = "", arity = 1) String ename) {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (ename.isEmpty()) {

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.jline.reader.LineReader;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -20,6 +21,7 @@ import com.manasys.manasys.service.InterfaceService.InterfaceMode;
  * @since 2025.6.28
  */
 @ShellComponent
+@ShellCommandGroup("公司客户操作")
 public class ClientPage {
 
     private final LineReader sin;
@@ -140,7 +142,7 @@ public class ClientPage {
             return services.get("clientService").getRecordInfo();
         } catch (Exception e) {
             return "ERROR: " + e.getMessage();
-          
+
         }
     }
 
