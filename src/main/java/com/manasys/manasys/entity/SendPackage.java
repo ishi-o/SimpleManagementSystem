@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
  * 发送快递记录
  *
  * @author 刘洛松
+ * @author 赵庆显
  * @since 2025.6.28
  * @see Package
  */
@@ -30,22 +31,43 @@ public class SendPackage extends Package {
 
     protected SendPackage() {
     }
-
+ /**
+ * 用于持久化操作的构造函数
+ *
+ * @param procDateTime 处理时间
+ * @param clientRecord 关联的客户记录
+ * @param fee 快递费用
+ */
     @PersistenceCreator
     protected SendPackage(LocalDateTime procDateTime, ClientRecord clientRecord, Integer fee) {
         super(procDateTime);
         this.clientRecord = clientRecord;
         this.fee = fee;
     }
-
+ /**
+ * 创建新的发送快递记录实例
+ *
+ * @param procDateTime 处理时间
+ * @param clientRecord 关联的客户记录
+ * @param fee 快递费用
+ * @return 新创建的发送快递记录对象
+ */
     public static SendPackage newInstance(LocalDateTime procDateTime, ClientRecord clientRecord, Integer fee) {
         return new SendPackage(procDateTime, clientRecord, fee);
     }
-
+ /**
+ * 获取关联的客户记录
+ *
+ * @return 客户记录对象
+ */
     public ClientRecord getClientRecord() {
         return clientRecord;
     }
-
+ /**
+ * 获取快递费用
+ *
+ * @return 快递费用
+ */
     public Integer getFee() {
         return fee;
     }

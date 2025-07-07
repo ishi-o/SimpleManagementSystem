@@ -11,18 +11,11 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * 日志工具类，支持动态配置日志输出位置、名称、标题和详细信息 Logs 工具类 日志分类：系统日志和错误日志分开存储
- * 日志格式：包含时间戳、日志级别、日志名称和消息 日志文件：自动创建logs目录，日志文件自动滚动 日志级别：可以动态设置日志级别
- * 扩展性：可以动态添加新的日志处理器 使用示例 public class Main { public static void main(String[]
- * args) { // 1. 动态设置日志目录 Logs.setLogDirectory("my_logs"); // 2.
- * 添加一个自定义日志处理器（例如审计日志） try { Logs.addFileHandler("AuditLog",
- * "my_logs/audit.log", "AUDIT LOG"); } catch (IOException e) {
- * e.printStackTrace(); } // 3. 记录日志 Logs.info("系统启动完成"); // 输出到
- * my_logs/system.log Logs.error("数据库连接失败", new RuntimeException("Connection
- * timeout")); // 4. 动态调整日志级别 Logs.setLogLevel(Level.FINE); // 启用DEBUG级别日志 } }
+ * 日志工具类，提供系统日志和错误日志记录功能
  *
  * @author 赵庆显
  * @since 2025.7.2
+ * @see java.util.logging.Logger
  */
 public final class Logs {
 
@@ -38,20 +31,22 @@ public final class Logs {
     private Logs() {
     }
 
-    // 初始化默认日志记录器（系统日志和错误日志）
+    /**
+     * 初始化默认日志记录器
+     *
+     * @throws SecurityException 如果没有权限创建日志文件
+     */
     private static void initDefaultLoggers() {
         try {
-            // 创建日志目录
+
             File dir = new File(logDir);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            // 系统日志配置
             systemLogger = Logger.getLogger("SystemLog");
             setupFileHandler(systemLogger, logDir + "/system.log", "SYSTEM LOG");
 
-            // 错误日志配置
             errorLogger = Logger.getLogger("ErrorLog");
             setupFileHandler(errorLogger, logDir + "/error.log", "ERROR LOG");
 
@@ -60,23 +55,43 @@ public final class Logs {
         }
     }
 
-    // 配置日志处理器（文件输出）
+    /**
+     * 配置日志文件处理器
+     *
+     * @param logger 要配置的日志记录器
+     * @param filePath 日志文件路径
+     * @param title 日志文件标题
+     * @throws IOException 文件操作异常时抛出
+     */
     private static void setupFileHandler(Logger logger, String filePath, String title) throws IOException {
         FileHandler fileHandler = new FileHandler(filePath, true);
         fileHandler.setFormatter(new CustomFormatter(title));
         logger.addHandler(fileHandler);
-        logger.setUseParentHandlers(false); // 禁止输出到父处理器（如控制台）
+        logger.setUseParentHandlers(false);
     }
 
-    // 自定义日志格式（支持动态标题）
+    /**
+     * 自定义日志格式化类
+     */
     private static class CustomFormatter extends Formatter {
 
         private final String title;
 
+        /**
+         * 构造方法
+         *
+         * @param title 日志标题
+         */
         public CustomFormatter(String title) {
             this.title = title;
         }
 
+        /**
+         * 格式化日志记录
+         *
+         * @param record 日志记录对象
+         * @return 格式化后的日志字符串
+         */
         @Override
         public String format(LogRecord record) {
             return String.format("[%s] [%s] [%s] %s: %s%n",
@@ -88,21 +103,23 @@ public final class Logs {
         }
     }
 
-    // 剩下的是公共API
     /**
-     * 设置日志输出目录（需在首次调用日志方法前设置）
+     * 设置日志目录
+     *
+     * @param directory 新的日志目录路径
      */
     public static void setLogDirectory(String directory) {
         logDir = directory;
-        initDefaultLoggers(); // 重新初始化日志器
+        initDefaultLoggers();
     }
 
     /**
-     * 动态添加一个新的日志处理器（例如输出到另一个文件）
+     * 添加文件处理器到指定日志记录器
      *
-     * @param loggerName 日志器名称（如"SystemLog"或自定义名称）
-     * @param filePath 日志文件路径（如"logs/custom.log"）
+     * @param loggerName 日志记录器名称
+     * @param filePath 日志文件路径
      * @param title 日志标题
+     * @throws IOException 文件操作异常时抛出
      */
     public static void addFileHandler(String loggerName, String filePath, String title) throws IOException {
         Logger logger = Logger.getLogger(loggerName);
@@ -110,27 +127,27 @@ public final class Logs {
     }
 
     /**
-     * 记录系统信息日志
+     * 记录INFO级别日志
      *
-     * @param message 日志信息
+     * @param message 日志消息
      */
     public static void info(String message) {
         systemLogger.info(message);
     }
 
     /**
-     * 记录警告日志
+     * 记录WARNING级别日志
      *
-     * @param message 日志信息
+     * @param message 日志消息
      */
     public static void warning(String message) {
         systemLogger.warning(message);
     }
 
     /**
-     * 记录错误日志（带异常堆栈）
+     * 记录ERROR级别日志
      *
-     * @param message 错误信息
+     * @param message 日志消息
      * @param throwable 异常对象
      */
     public static void error(String message, Throwable throwable) {
@@ -138,7 +155,9 @@ public final class Logs {
     }
 
     /**
-     * 设置日志级别（如Level.INFO、Level.DEBUG等）
+     * 设置日志级别
+     *
+     * @param level 要设置的日志级别
      */
     public static void setLogLevel(Level level) {
         systemLogger.setLevel(level);

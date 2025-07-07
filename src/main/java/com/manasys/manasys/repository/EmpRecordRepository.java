@@ -13,6 +13,7 @@ import com.manasys.manasys.entity.EmpRecord;
  * 员工打卡记录领域仓库接口
  *
  * @author 刘洛松
+ * @author 杨恒宇
  * @since 2025.6.28
  */
 @Repository
