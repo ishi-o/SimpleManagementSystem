@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  * @see java.util.logging.Logger
  */
 public final class Logs {
+
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     private static Logger systemLogger;
     private static Logger errorLogger;
@@ -27,7 +28,8 @@ public final class Logs {
         initDefaultLoggers();
     }
 
-    private Logs() {}
+    private Logs() {
+    }
 
     /**
      * 初始化默认日志记录器
@@ -36,14 +38,15 @@ public final class Logs {
      */
     private static void initDefaultLoggers() {
         try {
-          
+
             File dir = new File(logDir);
-            if (!dir.exists()) dir.mkdirs();
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
 
             systemLogger = Logger.getLogger("SystemLog");
             setupFileHandler(systemLogger, logDir + "/system.log", "SYSTEM LOG");
-            
-            
+
             errorLogger = Logger.getLogger("ErrorLog");
             setupFileHandler(errorLogger, logDir + "/error.log", "ERROR LOG");
 
@@ -64,22 +67,28 @@ public final class Logs {
         FileHandler fileHandler = new FileHandler(filePath, true);
         fileHandler.setFormatter(new CustomFormatter(title));
         logger.addHandler(fileHandler);
-        logger.setUseParentHandlers(false); 
+        logger.setUseParentHandlers(false);
     }
+
     /**
      * 自定义日志格式化类
      */
     private static class CustomFormatter extends Formatter {
+
         private final String title;
+
         /**
          * 构造方法
+         *
          * @param title 日志标题
          */
         public CustomFormatter(String title) {
             this.title = title;
         }
+
         /**
          * 格式化日志记录
+         *
          * @param record 日志记录对象
          * @return 格式化后的日志字符串
          */
@@ -96,15 +105,15 @@ public final class Logs {
 
     /**
      * 设置日志目录
-     * 
+     *
      * @param directory 新的日志目录路径
      */
     public static void setLogDirectory(String directory) {
         logDir = directory;
-        initDefaultLoggers(); 
+        initDefaultLoggers();
     }
 
-     /**
+    /**
      * 添加文件处理器到指定日志记录器
      *
      * @param loggerName 日志记录器名称
@@ -116,7 +125,7 @@ public final class Logs {
         Logger logger = Logger.getLogger(loggerName);
         setupFileHandler(logger, filePath, title);
     }
- 
+
     /**
      * 记录INFO级别日志
      *
@@ -155,4 +164,3 @@ public final class Logs {
         errorLogger.setLevel(level);
     }
 }
-
