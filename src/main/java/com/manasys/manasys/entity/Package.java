@@ -13,6 +13,7 @@ import jakarta.persistence.MappedSuperclass;
  * 快递类的基类
  *
  * @author 刘洛松
+ * @author 赵庆显
  * @since 2025.6.28
  */
 @MappedSuperclass
@@ -27,12 +28,20 @@ public abstract class Package {
 
     protected Package() {
     }
-
+/**
+ * 用于持久化操作的构造函数
+ *
+ * @param procDateTime 处理时间
+ */
     @PersistenceCreator
     protected Package(LocalDateTime procDateTime) {
         this.procDateTime = procDateTime;
     }
-
+/**
+ * 获取处理时间
+ *
+ * @return 处理时间
+ */
     public LocalDateTime getDateTime() {
         return procDateTime;
     }

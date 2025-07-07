@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
  * 记录类型服务的接口, 提供登记、查询信息、统计信息的方法
  *
  * @author 刘洛松
+ * @author 魏汉启
  * @since 2025.6.30
  */
 @Service
