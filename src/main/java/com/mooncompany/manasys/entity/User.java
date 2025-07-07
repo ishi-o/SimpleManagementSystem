@@ -75,6 +75,9 @@ public class User {
         }
     }
 
+    /**
+     * 获取哈希值
+     */
     @Override
     public int hashCode() {
         return uid.hashCode();

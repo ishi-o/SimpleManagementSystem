@@ -72,6 +72,9 @@ public class Client {
         }
     }
 
+    /**
+     * 获取哈希值
+     */
     @Override
     public int hashCode() {
         return cid.hashCode();

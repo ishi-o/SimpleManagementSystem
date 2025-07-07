@@ -58,16 +58,19 @@ public class Employee {
     }
 
     /**
-     * 比较两个员工对象是否相同
-     *
-     * @param o 要比较的对象
-     * @return 如果对象类型相同且ID相同返回true，否则返回false
+     * 获取哈希值
      */
     @Override
     public int hashCode() {
         return eid.hashCode();
     }
 
+    /**
+     * 比较两个员工对象是否相同
+     *
+     * @param o 要比较的对象
+     * @return 如果对象类型相同且ID相同返回true，否则返回false
+     */
     @Override
     public boolean equals(Object o) {
         return Employee.class == o.getClass() && eid.equals(((Employee) o).eid);

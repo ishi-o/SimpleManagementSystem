@@ -44,6 +44,9 @@ public abstract class Package {
         return obj instanceof Package && pid.equals(((Package) obj).pid);
     }
 
+    /**
+     * 获取哈希值
+     */
     @Override
     public int hashCode() {
         return pid.hashCode();

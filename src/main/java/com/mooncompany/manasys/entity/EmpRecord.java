@@ -123,6 +123,9 @@ public class EmpRecord {
         this.emprecord = new EmpRecordPK(emp, checkDate);
     }
 
+    /**
+     * 获取哈希值
+     */
     @Override
     public int hashCode() {
         return emprecord.hashCode();

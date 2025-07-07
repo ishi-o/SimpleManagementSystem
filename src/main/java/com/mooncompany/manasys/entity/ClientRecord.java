@@ -70,6 +70,9 @@ public class ClientRecord {
         }
     }
 
+    /**
+     * 获取哈希值
+     */
     @Override
     public int hashCode() {
         return crid.hashCode();
