@@ -99,7 +99,7 @@ public class PackagePage {
         try {
             interfaceServ.checkCurrMode(InterfaceMode.HOME);
             if (year == null || month == null) {
-                return "ERROR: 请提供接收快递的员工编号!\r\n       例如: get-fee 2025 6 或 get-fee --year 2025 --month 6";
+                return "ERROR: 请提供指定的年份及月份!\r\n       例如: get-fee 2025 6 或 get-fee --year 2025 --month 6";
             }
             return "OK: \r\n" + pkgServ.getFee(year, month);
         } catch (Exception e) {
