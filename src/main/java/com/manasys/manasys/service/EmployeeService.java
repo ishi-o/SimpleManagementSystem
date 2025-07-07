@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
  * 关于公司员工的服务
  *
  * @author 刘洛松
+ * @author 魏汉启
  * @since 2025.6.28
  * @see CommonService
  */

@@ -13,6 +13,7 @@ import jakarta.persistence.MappedSuperclass;
  * 快递类的基类
  *
  * @author 刘洛松
+ * @author 赵庆显
  * @since 2025.6.28
  */
 @MappedSuperclass

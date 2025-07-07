@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
  * 提供针对管理员账户的服务
  *
  * @author 刘洛松
+ * @author 张嘉政
  * @since 2025.6.25
  * @see CommonService
  */

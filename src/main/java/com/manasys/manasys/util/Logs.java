@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 /**
  * 日志工具类，提供系统日志和错误日志记录功能
  *
- * @author 刘洛松
- * @since 2025.6.30
+ * @author 赵庆显
+ * @since 2025.7.2
  * @see java.util.logging.Logger
  */
 public final class Logs {

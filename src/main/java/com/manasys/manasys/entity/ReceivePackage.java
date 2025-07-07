@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
  * 接收的快递记录
  *
  * @author 刘洛松
+ * @author 赵庆显
  * @since 2025.6.28
  * @see Package
  */

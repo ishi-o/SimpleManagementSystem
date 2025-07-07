@@ -9,6 +9,7 @@ import com.manasys.manasys.entity.Employee;
  * 公司员工领域仓库接口, 继承自JpaRepository
  *
  * @author 刘洛松
+ * @author 杨恒宇
  * @since 2025.6.28
  * @see JpaRepository
  */

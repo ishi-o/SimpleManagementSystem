@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
  * 提供客户业务功能的服务类
  *
  * @author 刘洛松
+ * @author 魏汉启
  * @since 2025.6.28
  */
 @Service

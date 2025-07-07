@@ -13,8 +13,8 @@ import java.util.function.Function;
  * <p>该类包含用户名、密码、电话号码、日期格式等多种验证方法，
  * 支持通过注册机制扩展自定义验证规则</p>
  *
- * @author 刘洛松
- * @since 2025.6.30
+ * @author 赵庆显
+ * @since 2025.7.2
  */
 
 public final class Inspections {

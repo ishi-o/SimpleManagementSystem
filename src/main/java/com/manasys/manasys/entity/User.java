@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
  * 用户实体类
  *
  * @author 刘洛松
+ * @author 赵庆显
  * @since 2025.6.25
  */
 @Entity

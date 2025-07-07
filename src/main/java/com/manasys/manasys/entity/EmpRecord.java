@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
  * 员工打卡记录实体类
  *
  * @author 刘洛松
+ * @author 赵庆显
  * @since 2025.6.28
  */
 @Entity
